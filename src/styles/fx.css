@@ -19,8 +19,8 @@
 
 /* ambient parallax orbs */
 .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:-1;will-change:transform}
-.orb-blue{background:radial-gradient(circle,rgba(215,222,33,.34),transparent 70%)}
-.orb-paper{background:radial-gradient(circle,rgba(232,239,90,.2),transparent 70%)}
+.orb-blue{background:radial-gradient(circle,rgba(61,127,255,.5),transparent 70%)}
+.orb-paper{background:radial-gradient(circle,rgba(90,170,255,.32),transparent 70%)}
 .hero .orb-1{width:560px;height:560px;top:-160px;right:-140px}
 .hero .orb-2{width:400px;height:400px;bottom:-100px;left:-140px}
 .position .orb-1{width:480px;height:480px;top:10%;right:-160px}
@@ -35,7 +35,7 @@
 .method .timeline-fill{position:absolute;left:23px;top:0;width:2px;height:100%;background:var(--blue);transform-origin:top;transform:scaleY(0);z-index:0}
 .method .step{position:relative;z-index:1}
 .method .sn{background:var(--paper-2);transition:background .3s,color .3s,border-color .3s,transform .3s}
-.method .step.active .sn{background:var(--blue);color:#0a0a08;border-color:var(--blue);transform:scale(1.08)}
+.method .step.active .sn{background:var(--blue);color:#fff;border-color:var(--blue);transform:scale(1.08)}
 
 /* partnership flow draw */
 .partner .flow{position:relative}
@@ -54,13 +54,13 @@
 /* ══ PRELOADER ════════════════════════
    Entry gate, matching wlt.design's pace.js "Launching 3D" screen.
    ═════════════════════════════════════ */
-.preload{position:fixed;inset:0;z-index:400;background:#0a0a08;
+.preload{position:fixed;inset:0;z-index:400;background:#08090c;
   display:grid;place-items:center;grid-template-rows:1fr auto}
 .preload-in{display:flex;flex-direction:column;align-items:center;gap:14px;align-self:center}
-.preload-word{font-family:var(--font-display);font-weight:600;
-  font-size:clamp(2rem,6vw,4rem);letter-spacing:-.03em;color:var(--ink)}
+.preload-word{font-family:var(--font-display);font-weight:800;
+  font-size:clamp(2rem,6vw,4rem);letter-spacing:-.03em;color:#fff}
 .preload-note{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--blue-ink)}
-.preload-pct{font-size:.8rem;letter-spacing:.2em;color:var(--ink-faint);padding-bottom:30px}
+.preload-pct{font-size:.8rem;letter-spacing:.2em;color:#4d5462;padding-bottom:30px}
 .preload-bar{position:absolute;left:0;bottom:0;width:100%;height:2px;
   background:var(--grad);transform-origin:0 50%;transition:transform .2s linear}
 

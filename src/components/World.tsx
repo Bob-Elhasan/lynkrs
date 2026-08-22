@@ -5,16 +5,6 @@ import { useScroll, useMotionValueEvent } from "motion/react";
 import { FlightScene } from "@/three/flight-scene";
 
 /**
- * ── Swapping in the produced asset ──────────────────────────────
- * Drop `spaces.glb` into /public and set this to "/spaces.glb".
- * That is the whole change; the scroll wiring is already built against
- * the clip contract in the production spec (`CameraFlythrough` driving
- * a `CameraTrack` node, position + quaternion). Until then the scene
- * runs an equivalent placeholder clip and four stand-in spaces.
- */
-const GLB_PATH: string | null = null;
-
-/**
  * A single continuous 3D world behind every section between the hero and the
  * closing CTA. The canvas is a sticky background pulled out of flow with a
  * negative margin, so it stays pinned for the whole range while the content
@@ -47,14 +37,6 @@ export default function World({ children }: { children: React.ReactNode }) {
     sceneRef.current = scene;
     scene.progress = scrollYProgress.get();
     scene.start();
-
-    if (GLB_PATH) {
-      const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-      // Failure keeps the placeholder on screen rather than blanking the page.
-      scene.loadGLB(`${base}${GLB_PATH}`).catch((err) => {
-        console.error("[world] could not load spaces.glb, keeping placeholder", err);
-      });
-    }
 
     // Stop rendering entirely once the world scrolls out of view; there is no
     // reason to keep a WebGL loop running behind the footer.
