@@ -19,8 +19,8 @@
 
 /* ambient parallax orbs */
 .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:-1;will-change:transform}
-.orb-blue{background:radial-gradient(circle,rgba(223,68,24,.5),transparent 70%)}
-.orb-paper{background:radial-gradient(circle,rgba(255,144,0,.32),transparent 70%)}
+.orb-blue{background:radial-gradient(circle,rgba(61,127,255,.5),transparent 70%)}
+.orb-paper{background:radial-gradient(circle,rgba(90,170,255,.32),transparent 70%)}
 .hero .orb-1{width:560px;height:560px;top:-160px;right:-140px}
 .hero .orb-2{width:400px;height:400px;bottom:-100px;left:-140px}
 .position .orb-1{width:480px;height:480px;top:10%;right:-160px}
