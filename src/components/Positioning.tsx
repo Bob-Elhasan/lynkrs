@@ -1,10 +1,9 @@
 import { Effect } from "@/components/animate-ui/effect";
-import { ScrollScale, Parallax } from "@/components/animate-ui/scroll-scrub";
+import { ScrollScale } from "@/components/animate-ui/scroll-scrub";
 
 export default function Positioning() {
   return (
     <section className="position">
-      <Parallax speed={0.25} className="orb orb-blue orb-1" aria-hidden="true" />
       <div className="shell">
         <div className="meta">
           <span className="idx">02</span>

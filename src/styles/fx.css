@@ -65,5 +65,5 @@
   background:var(--grad);transform-origin:0 50%;transition:transform .2s linear}
 
 /* header waits for the gate to lift, the way theirs waits on .preloaded */
-.topbar{opacity:0;transition:opacity .5s ease .1s,transform .4s cubic-bezier(.2,.8,.2,1)}
+.topbar{opacity:0;transition:opacity .5s ease .1s,padding .35s cubic-bezier(.2,.8,.2,1)}
 body.preloaded .topbar{opacity:1}

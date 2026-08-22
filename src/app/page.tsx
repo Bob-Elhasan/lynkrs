@@ -1,9 +1,10 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import World from "@/components/World";
 import Statement from "@/components/Statement";
-import Flight from "@/components/Flight";
 import Problem from "@/components/Problem";
 import Positioning from "@/components/Positioning";
+import Philosophy from "@/components/Philosophy";
 import Method from "@/components/Method";
 import Rail from "@/components/Rail";
 import Modules from "@/components/Modules";
@@ -17,17 +18,20 @@ export default function Home() {
   return (
     <>
       <Preloader />
-      <Header />
       <Hero />
-      <Statement />
-      {/* Scroll-scrubbed 3D flight — carries the growth philosophy in-scene. */}
-      <Flight />
-      <Problem />
-      <Positioning />
-      <Method />
-      <Rail />
-      <Modules />
-      <Partnership />
+      {/* nav sits under the hero, then sticks for the rest of the page */}
+      <Header />
+      {/* one continuous 3D flight behind everything up to the CTA */}
+      <World>
+        <Statement />
+        <Problem />
+        <Positioning />
+        <Philosophy />
+        <Method />
+        <Rail />
+        <Modules />
+        <Partnership />
+      </World>
       <Closer />
       <Footer />
       <SiteFX />

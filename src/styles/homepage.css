@@ -35,7 +35,16 @@ section{position:relative}
 .meta .lbl{font-family:var(--font-body);font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);text-align:right}
 
 /* ══ HEADER ═══════════════════════════ */
-.topbar{position:fixed;inset:0 0 auto 0;z-index:90;transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.topbar-sentinel{height:0}
+/* sits below the hero in flow, then sticks once scrolled past */
+.topbar{position:sticky;top:0;z-index:90;transition:padding .35s cubic-bezier(.2,.8,.2,1)}
+/* content scrolling under the bar dissolves instead of showing through the
+   gaps either side of the pill */
+.topbar::before{content:'';position:absolute;left:0;right:0;top:0;
+  height:calc(100% + 26px);z-index:-1;pointer-events:none;opacity:0;
+  transition:opacity .35s ease;
+  background:linear-gradient(180deg,#08090c 58%,rgba(8,9,12,0))}
+.topbar.pill::before{opacity:1}
 .topbar-in{display:flex;align-items:center;justify-content:space-between;max-width:var(--max);margin:0 auto;padding:22px var(--pad)}
 .brand{display:flex;align-items:center;gap:10px}
 .brand img{height:20px;width:auto;display:block}
@@ -51,20 +60,20 @@ section{position:relative}
 /* condensed glass pill state */
 .topbar.pill{padding-top:14px}
 .topbar.pill .topbar-in{max-width:min(920px,calc(100% - 32px));border-radius:999px;padding:11px 12px 11px 24px;
-  background:linear-gradient(135deg,rgba(30,28,26,.72),rgba(16,16,16,.55));
-  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  background:linear-gradient(135deg,rgba(22,25,32,.92),rgba(12,14,18,.88));
+  backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);
   border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
 .topbar.pill .topcta{background:var(--ink);color:var(--paper);padding:8px 8px 8px 18px;border-radius:999px}
 .topbar.pill .topcta .arw{background:var(--grad)}
-.topbar.hide{transform:translateY(-120%)}
 
 /* ══ HERO ═════════════════════════════ */
-.hero{padding-top:clamp(140px,20vh,220px);padding-bottom:clamp(60px,9vw,120px)}
+.hero{min-height:100svh;display:flex;align-items:center;
+  padding-block:clamp(90px,14vh,160px)}
 .hero-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:clamp(34px,5vw,60px)}
 .hero-kick{font-family:var(--font-body);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);max-width:280px;line-height:1.7}
 .hero-kick b{color:var(--blue);font-weight:600}
 .hero-est{font-family:var(--font-body);font-size:.74rem;letter-spacing:.12em;color:var(--ink-faint);text-align:right}
-.hero-h1{font-size:var(--fs-mega);letter-spacing:-.045em;max-width:16ch}
+.hero-h1{font-size:var(--fs-mega);letter-spacing:-.045em;max-width:18ch;text-wrap:balance}
 .hero-h1 .lead{color:var(--ink-faint);font-weight:900}
 .wm{position:relative;display:inline-block}
 /* handwritten annotations */
@@ -260,7 +269,9 @@ footer{background:#000;color:#8f8a80;padding-block:clamp(40px,5vw,64px);border-t
   .topcta{font-size:0;gap:0}
   .topcta .arw{width:34px;height:34px}
   .topcta .arw svg{width:13px;height:13px}
-  .topbar.pill .topcta{padding:6px;border-radius:999px}
+  /* the pill state paints .topcta white, which would ring the arrow in a
+     white donut once the label is gone — drop it to just the arrow */
+  .topbar.pill .topcta{padding:0;background:transparent}
   :root{--fs-mega:clamp(2.5rem,10vw,4rem)}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

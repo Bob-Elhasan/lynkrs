@@ -37,6 +37,11 @@ export class FlightScene {
 
   /** Scroll progress 0..1 — set externally, consumed on the next frame. */
   progress = 0;
+  /** Progress the camera actually uses, easing toward `progress`. This is the
+   *  equivalent of GSAP's `scrub` lag and is what makes the flight feel like
+   *  gliding rather than being dragged frame-by-frame with the wheel. */
+  private smoothed = 0;
+  private paused = false;
   /** Pointer offset in normalized -1..1 space. */
   private pointer = new THREE.Vector2();
   /** Smoothed camera target, so pointer motion eases rather than snaps. */
@@ -62,11 +67,11 @@ export class FlightScene {
       powerPreference: "high-performance",
     });
     // A phone at dpr 3 would otherwise rasterise ~1M px/frame for this scene.
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.lite ? 1.5 : 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.lite ? 1.5 : 1.75));
     this.renderer.setSize(window.innerWidth, window.innerHeight, false);
 
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x08090c, 0.0032);
+    this.scene.fog = new THREE.FogExp2(0x08090c, 0.0044);
 
     this.camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 0.1, 900);
 
@@ -110,12 +115,25 @@ export class FlightScene {
 
     const frameMat = new THREE.MeshBasicMaterial({
       transparent: true,
-      opacity: 0.9,
+      // reads as a backdrop behind copy now rather than the subject itself
+      opacity: 0.58,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
-    const frames = new THREE.InstancedMesh(frameGeo, frameMat, COUNT);
-    frames.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(COUNT * 3), 3);
+    // Split into chunks along the corridor. A single InstancedMesh spanning the
+    // whole path is culled as one unit, so every frame draws every tick — and
+    // these are large additive quads, so that overdraw is the dominant cost.
+    // Chunked, the frustum drops everything behind and far ahead of the camera.
+    const CHUNKS = this.lite ? 4 : 7;
+    const per = Math.ceil(COUNT / CHUNKS);
+    const frameChunks: THREE.InstancedMesh[] = [];
+    for (let k = 0; k < CHUNKS; k++) {
+      const n = Math.min(per, COUNT - k * per);
+      if (n <= 0) break;
+      const mesh = new THREE.InstancedMesh(frameGeo, frameMat, n);
+      mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(n * 3), 3);
+      frameChunks.push(mesh);
+    }
 
     const m = new THREE.Matrix4();
     const q = new THREE.Quaternion();
@@ -124,6 +142,8 @@ export class FlightScene {
     const c = new THREE.Color();
 
     for (let i = 0; i < COUNT; i++) {
+      const chunk = frameChunks[Math.floor(i / per)];
+      const slot = i % per;
       const t = i / (COUNT - 1);
       // Frames begin just ahead of the camera and run the length of the path,
       // so p=0 already looks down a stack of receding portals rather than into
@@ -138,17 +158,21 @@ export class FlightScene {
       scl.set(s, s * (0.66 + Math.sin(i * 0.5) * 0.14), 1);
       q.setFromEuler(new THREE.Euler(0, 0, Math.PI / 4 + Math.sin(i * 0.7) * 0.12));
       m.compose(pos, q, scl);
-      frames.setMatrixAt(i, m);
+      chunk.setMatrixAt(slot, m);
 
       // Colour shifts across the four zones: pale -> accent -> deep -> pale.
       const zone = t < 0.26 ? 0 : t < 0.52 ? 1 : t < 0.78 ? 2 : 3;
       c.copy(zone === 0 ? ACCENT_PALE : zone === 1 ? ACCENT : zone === 2 ? ACCENT_DEEP : ACCENT);
       c.multiplyScalar(0.7 + 0.3 * Math.sin(i * 0.4));
-      frames.setColorAt(i, c);
+      chunk.setColorAt(slot, c);
     }
-    frames.instanceMatrix.needsUpdate = true;
-    if (frames.instanceColor) frames.instanceColor.needsUpdate = true;
-    this.scene.add(frames);
+    frameChunks.forEach((mesh) => {
+      mesh.instanceMatrix.needsUpdate = true;
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+      // Tight per-chunk bounds are what let the frustum reject them.
+      mesh.computeBoundingSphere();
+      this.scene.add(mesh);
+    });
     this.trash.push(frameGeo, frameMat);
 
     // Scattered volumes flanking the path — read as architecture at speed.
@@ -159,8 +183,16 @@ export class FlightScene {
       opacity: 0.85,
     });
     const BOXES = this.lite ? 40 : 90;
-    const boxes = new THREE.InstancedMesh(boxGeo, boxMat, BOXES);
+    const boxPer = Math.ceil(BOXES / CHUNKS);
+    const boxChunks: THREE.InstancedMesh[] = [];
+    for (let k = 0; k < CHUNKS; k++) {
+      const n = Math.min(boxPer, BOXES - k * boxPer);
+      if (n <= 0) break;
+      boxChunks.push(new THREE.InstancedMesh(boxGeo, boxMat, n));
+    }
     for (let i = 0; i < BOXES; i++) {
+      const chunk = boxChunks[Math.floor(i / boxPer)];
+      const slot = i % boxPer;
       const t = i / BOXES;
       const p = this.path.getPointAt(Math.min(t * 0.97, 1));
       const side = i % 2 === 0 ? 1 : -1;
@@ -173,10 +205,13 @@ export class FlightScene {
       scl.set(w, w * (0.5 + Math.random() * 3), w);
       q.setFromEuler(new THREE.Euler(Math.random() * 0.4, Math.random() * Math.PI, Math.random() * 0.4));
       m.compose(pos, q, scl);
-      boxes.setMatrixAt(i, m);
+      chunk.setMatrixAt(slot, m);
     }
-    boxes.instanceMatrix.needsUpdate = true;
-    this.scene.add(boxes);
+    boxChunks.forEach((mesh) => {
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      this.scene.add(mesh);
+    });
     this.trash.push(boxGeo, boxMat);
 
     // Emissive accent strips — the brand colour threading through the dark.
@@ -286,8 +321,24 @@ export class FlightScene {
     this.renderer.setSize(window.innerWidth, window.innerHeight, false);
   }
 
+  /** Stop the render loop when the world is off-screen. */
+  setPaused(paused: boolean) {
+    if (paused === this.paused) return;
+    this.paused = paused;
+    if (!paused) {
+      // Skip the wall-clock gap so ambient motion doesn't jump on resume.
+      this.clock.getDelta();
+      this.start();
+    }
+  }
+
   start() {
+    if (this.raf) cancelAnimationFrame(this.raf);
     const tick = () => {
+      if (this.paused) {
+        this.raf = 0;
+        return;
+      }
       this.raf = requestAnimationFrame(tick);
       this.update();
     };
@@ -296,7 +347,11 @@ export class FlightScene {
 
   private update() {
     const t = this.clock.getElapsedTime();
-    const p = THREE.MathUtils.clamp(this.progress, 0, 1);
+    const target = THREE.MathUtils.clamp(this.progress, 0, 1);
+    this.smoothed += (target - this.smoothed) * 0.075;
+    // Snap once close enough, so the camera settles instead of creeping.
+    if (Math.abs(target - this.smoothed) < 0.0002) this.smoothed = target;
+    const p = this.smoothed;
 
     // Position along the baked path is a pure function of scroll — this is the
     // scrub. Everything else is ambient motion layered on top.
@@ -316,7 +371,7 @@ export class FlightScene {
     );
     this.camera.lookAt(look.x + this.drift.x * 1.2, look.y - this.drift.y * 0.8, look.z);
     // Subtle roll into the turns.
-    this.camera.rotation.z += Math.sin(p * Math.PI * 3) * 0.04;
+    this.camera.rotation.z += Math.sin(p * Math.PI * 3) * 0.03;
 
     if (!this.reducedMotion) {
       this.particleGroups.forEach((g, i) => {

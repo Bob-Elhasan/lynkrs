@@ -1,5 +1,4 @@
 import { Effect, Effects } from "@/components/animate-ui/effect";
-import { Parallax } from "@/components/animate-ui/scroll-scrub";
 
 const FLOW = [
   "You set the objectives",
@@ -11,7 +10,6 @@ const FLOW = [
 export default function Partnership() {
   return (
     <section className="partner" id="partner">
-      <Parallax speed={0.2} className="orb orb-blue orb-1" aria-hidden="true" />
       <div className="shell">
         <div className="meta">
           <span className="idx">07</span>
