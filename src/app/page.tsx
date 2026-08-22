@@ -12,12 +12,10 @@ import Partnership from "@/components/Partnership";
 import Closer from "@/components/Closer";
 import Footer from "@/components/Footer";
 import SiteFX from "@/components/SiteFX";
-import Preloader from "@/components/Preloader";
 
 export default function Home() {
   return (
     <>
-      <Preloader />
       <Hero />
       {/* nav sits under the hero, then sticks for the rest of the page */}
       <Header />
