@@ -1,23 +1,21 @@
-import { Effect } from "@/components/animate-ui/effect";
+import Scene, { Step } from "@/components/Scene";
 
 export default function Statement() {
   return (
-    <section className="statement">
-      <div className="shell statement-grid">
-        <div className="statement-side">
-          Our
-          <br />
-          promise
-          <br />—
-        </div>
-        <Effect asChild fade slide>
-          <p>
-            You&apos;re busy running the business. <span className="em">We run the growth;</span> strategy,
-            media, content and SEO operating under one objective:{" "}
-            <span className="muted">structured, measurable and scalable.</span>
-          </p>
-        </Effect>
-      </div>
-    </section>
+    <Scene className="statement" depth="240vh">
+      <Step from={0.06} to={0.22}>
+        <p className="scene-quote">You&apos;re busy running the business.</p>
+      </Step>
+      <Step from={0.3} to={0.46}>
+        <p className="scene-quote">
+          <span className="em">We run the growth.</span>
+        </p>
+      </Step>
+      <Step from={0.54} to={0.72}>
+        <p className="scene-quote muted">
+          Strategy, media, content and SEO under one objective: structured, measurable and scalable.
+        </p>
+      </Step>
+    </Scene>
   );
 }

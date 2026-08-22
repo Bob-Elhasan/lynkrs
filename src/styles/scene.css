@@ -1,0 +1,90 @@
+/* ══════════════════════════════════════════
+   SCENE — pinned sections whose scroll range
+   drives the reveal of their own contents.
+   ══════════════════════════════════════════ */
+
+.scene{position:relative}
+.scene-stage{position:sticky;top:0;height:100vh;height:100svh;
+  display:flex;align-items:center;overflow:hidden}
+.scene-inner{width:100%;max-width:var(--max);margin:0 auto;
+  display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,1.8vw,24px)}
+
+.scene-meta{margin-bottom:0}
+.scene-rule{height:1px;background:var(--blue);transform-origin:0 50%;width:100%;opacity:.55}
+
+.scene-h2{font-size:clamp(1.9rem,4.4vw,3.6rem);letter-spacing:-.03em;max-width:22ch;text-wrap:balance}
+.scene-h2.tight{max-width:14ch}
+.scene-quote{font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.6rem,3.8vw,3.2rem);letter-spacing:-.03em;line-height:1.16;max-width:24ch}
+.scene-quote .hl{color:var(--blue)}
+.scene-quote .em{color:var(--blue)}
+.scene-quote.muted{color:var(--ink-soft);font-size:clamp(1.2rem,2.4vw,2rem);font-weight:600}
+.scene-lede{color:var(--ink-soft);font-size:clamp(1rem,1.35vw,1.18rem);line-height:1.6;max-width:52ch}
+.scene-kicker{font-size:clamp(1.1rem,2vw,1.6rem);font-weight:600;color:var(--ink);max-width:30ch}
+.scene-sig{font-family:var(--font-caveat),cursive;font-weight:700;
+  font-size:clamp(1.6rem,2.6vw,2.4rem);color:var(--blue)}
+
+/* costs deal out in a row on wide screens, stack on narrow */
+.scene-costs{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+.scene-costs .cost{padding:22px 20px 26px;border:1px solid var(--line);border-radius:14px;
+  background:rgba(18,21,28,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);height:100%}
+.scene-costs .cost .n{font-size:.7rem;letter-spacing:.1em;color:var(--blue);font-weight:600}
+.scene-costs .cost h3{margin-top:14px;font-size:1.1rem;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.scene-costs .cost p{margin-top:9px;color:var(--ink-soft);font-size:.86rem;line-height:1.5}
+
+/* philosophy rows */
+.scene-rows{display:flex;flex-direction:column;gap:0}
+.scene-rows .phil-row{border-bottom:1px solid var(--line);padding:clamp(16px,2.4vw,26px) 0}
+
+/* method steps */
+.scene-steps{display:flex;flex-direction:column;gap:0}
+.scene-steps .step{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;
+  padding:clamp(12px,1.6vw,18px) 0;border-top:1px solid var(--line)}
+.scene-steps .step:first-child{border-top:none}
+.scene-steps .sn{width:42px;height:42px;border:1px solid var(--blue);color:var(--blue);
+  border-radius:999px;display:grid;place-items:center;font-size:.82rem;font-weight:600}
+/* the number is real text here; homepage.css's counter ::before would double it */
+.scene-steps .sn::before{content:none}
+.scene-steps .step h3{font-size:clamp(1.05rem,1.7vw,1.35rem);font-weight:700;letter-spacing:-.02em}
+.scene-steps .step p{margin-top:5px;color:var(--ink-soft);font-size:.92rem;line-height:1.5;max-width:52ch}
+
+@media(max-width:900px){
+  /* The stage is pinned and clips, so everything a scene reveals has to fit
+     one viewport. Costs go 2x2 rather than a 4-high stack, and type steps
+     down, otherwise the last cards are revealed into hidden overflow. */
+  .scene-stage{align-items:center;padding-block:8vh 4vh}
+  .scene-inner{gap:9px}
+  .scene-h2{font-size:clamp(1.5rem,6.2vw,2.1rem);max-width:none}
+  .scene-quote{font-size:clamp(1.4rem,6vw,2rem);max-width:none}
+  .scene-quote.muted{font-size:clamp(1rem,4.2vw,1.3rem)}
+  .scene-lede{font-size:.9rem;max-width:none}
+  .scene-kicker{font-size:1.05rem;max-width:none}
+  .scene-costs{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px}
+  .scene-costs .cost{padding:12px 12px 14px;border-radius:11px}
+  .scene-costs .cost .n{font-size:.6rem}
+  .scene-costs .cost h3{margin-top:7px;font-size:.9rem}
+  .scene-costs .cost p{margin-top:5px;font-size:.75rem;line-height:1.4}
+  .scene-rows .phil-row{padding:10px 0}
+  .scene-steps .sn{width:30px;height:30px;font-size:.68rem}
+  .scene-steps .step{gap:12px;padding:8px 0}
+  .scene-steps .step h3{font-size:.98rem}
+  .scene-steps .step p{margin-top:3px;font-size:.8rem;line-height:1.42}
+}
+@media(max-width:560px){
+  /* Everything a pinned scene reveals must fit one viewport or it is revealed
+     into clipped overflow. At this width the supporting copy renders as ~12px
+     in a 2-up grid anyway, so the headings carry it and the bodies go. */
+  .scene-steps .step p{display:none}
+  .scene-rows .phil-row .tag{display:none}
+  .scene-costs .cost p{display:none}
+  .scene-costs .cost{padding:11px 12px 13px}
+}
+
+/* Without a scroll-driven reveal there is nothing to pin: let the scenes
+   flow as ordinary stacked sections with everything already visible. */
+@media(prefers-reduced-motion:reduce){
+  .scene{height:auto!important}
+  .scene-stage{position:static;height:auto;padding-block:clamp(56px,8vw,96px);align-items:stretch}
+  .scene-inner [style]{opacity:1!important;transform:none!important}
+  .scene-rule{transform:scaleX(1)!important}
+}

@@ -1,4 +1,4 @@
-import { Effects } from "@/components/animate-ui/effect";
+import Scene, { Step, StepMeta } from "@/components/Scene";
 
 const ROWS = [
   { rn: "01", title: "Performance must serve business objectives", tag: "Not vanity metrics" },
@@ -9,24 +9,22 @@ const ROWS = [
 
 export default function Philosophy() {
   return (
-    <section className="phil" id="philosophy">
-      <div className="shell">
-        <div className="meta">
-          <span className="idx">03</span>
-          <span className="lbl">Growth philosophy</span>
-        </div>
-        <div className="phil-list">
-          <Effects asChild fade slide holdDelay={70}>
-            {ROWS.map((r) => (
-              <div className="phil-row" key={r.rn}>
+    <Scene id="philosophy" className="phil" depth="320vh">
+      <StepMeta idx="03" label="Growth philosophy" />
+      <div className="scene-rows">
+        {ROWS.map((r, i) => {
+          const start = 0.08 + i * 0.2;
+          return (
+            <Step key={r.rn} from={start} to={start + 0.12} travel={30}>
+              <div className="phil-row">
                 <span className="rn">{r.rn}</span>
                 <h3>{r.title}</h3>
                 <span className="tag">{r.tag}</span>
               </div>
-            ))}
-          </Effects>
-        </div>
+            </Step>
+          );
+        })}
       </div>
-    </section>
+    </Scene>
   );
 }

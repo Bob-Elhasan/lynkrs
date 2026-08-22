@@ -2,18 +2,20 @@
 
 import * as React from "react";
 import { useScroll, useMotionValueEvent } from "motion/react";
-import { FlightScene } from "@/three/flight-scene";
+import { NetworkField } from "@/two/network-field";
 
 /**
- * A single continuous 3D world behind every section between the hero and the
- * closing CTA. The canvas is a sticky background pulled out of flow with a
+ * One continuous 2D field behind every section between the hero and the CTA.
+ *
+ * The canvas is a sticky background pulled out of flow with a matching
  * negative margin, so it stays pinned for the whole range while the content
- * scrolls over it — one uninterrupted flight rather than a per-section effect.
+ * scrolls over it. Its state is a pure function of scroll progress — it has no
+ * clock of its own, so it only ever moves when the reader does.
  */
 export default function World({ children }: { children: React.ReactNode }) {
   const ref = React.useRef<HTMLDivElement>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const sceneRef = React.useRef<FlightScene | null>(null);
+  const fieldRef = React.useRef<NetworkField | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -25,35 +27,44 @@ export default function World({ children }: { children: React.ReactNode }) {
     const host = ref.current;
     if (!canvas || !host) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
+    const accent =
+      getComputedStyle(document.documentElement).getPropertyValue("--blue").trim() || "#3d7fff";
 
-    let scene: FlightScene;
+    let field: NetworkField;
     try {
-      scene = new FlightScene(canvas, false);
+      field = new NetworkField(canvas, accent);
     } catch {
-      return; // no WebGL — sections still read fine on the flat background
+      return; // no 2d context — sections still read on the flat background
     }
-    sceneRef.current = scene;
-    scene.progress = scrollYProgress.get();
-    scene.start();
+    fieldRef.current = field;
 
-    // Stop rendering entirely once the world scrolls out of view; there is no
-    // reason to keep a WebGL loop running behind the footer.
-    const io = new IntersectionObserver(([e]) => scene.setPaused(!e.isIntersecting), {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      // Draw the resolved end state once and leave it there.
+      field.renderStatic(1);
+      return () => {
+        field.dispose();
+        fieldRef.current = null;
+      };
+    }
+
+    field.progress = scrollYProgress.get();
+    field.start();
+
+    const io = new IntersectionObserver(([e]) => field.setPaused(!e.isIntersecting), {
       rootMargin: "10% 0px 10% 0px",
     });
     io.observe(host);
 
     return () => {
       io.disconnect();
-      scene.dispose();
-      sceneRef.current = null;
+      field.dispose();
+      fieldRef.current = null;
     };
   }, [scrollYProgress]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (sceneRef.current) sceneRef.current.progress = v;
+    if (fieldRef.current) fieldRef.current.progress = v;
   });
 
   return (
