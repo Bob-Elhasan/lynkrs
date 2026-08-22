@@ -43,7 +43,7 @@ export default function Suite() {
         </div>
         <div className="suite-grid">
           {PRODUCTS.map((p) => (
-            <div className="pcard rv" key={p.rn}>
+            <div className="pcard stg" key={p.rn}>
               <div className="pcard-top">
                 <span className="stage">{p.stage}</span>
                 <span className="rn">{p.rn}</span>

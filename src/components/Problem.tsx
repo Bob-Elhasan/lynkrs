@@ -33,21 +33,21 @@ export default function Problem() {
             everywhere at once.
           </p>
         </div>
-        <div className="costs rv">
+        <div className="costs">
           {COSTS.map((c) => (
-            <div className="cost" key={c.n}>
+            <div className="cost stg" key={c.n}>
               <span className="n">{c.n}</span>
               <span className="plus">+</span>
               <h3>{c.title}</h3>
               <p>{c.body}</p>
             </div>
           ))}
-          <div className="cost wide">
+          <div className="cost wide stg">
             <span className="n">THE RESULT</span>
             <h3>Marketing becomes a cost — not an investment.</h3>
             <p>Short-term wins with no system underneath. Nothing compounds, nothing scales.</p>
           </div>
-          <div className="cost">
+          <div className="cost stg">
             <span className="n">COST 04</span>
             <span className="plus">+</span>
             <h3>Limited scalability</h3>

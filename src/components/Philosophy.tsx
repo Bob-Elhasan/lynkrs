@@ -13,9 +13,9 @@ export default function Philosophy() {
           <span className="idx">03</span>
           <span className="lbl">Growth philosophy</span>
         </div>
-        <div className="phil-list rv">
+        <div className="phil-list">
           {ROWS.map((r) => (
-            <div className="phil-row" key={r.rn}>
+            <div className="phil-row stg" key={r.rn}>
               <span className="rn">{r.rn}</span>
               <h3>{r.title}</h3>
               <span className="tag">{r.tag}</span>

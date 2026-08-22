@@ -39,9 +39,11 @@ export default function Method() {
               </p>
             </div>
           </div>
-          <div className="steps rv">
+          <div className="steps">
+            <div className="timeline-track" aria-hidden="true" />
+            <div className="timeline-fill" aria-hidden="true" />
             {STEPS.map((s) => (
-              <div className="step" key={s.title}>
+              <div className="step stg" key={s.title}>
                 <span className="sn"></span>
                 <div>
                   <h3>{s.title}</h3>

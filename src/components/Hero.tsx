@@ -1,6 +1,8 @@
 export default function Hero() {
   return (
     <section className="hero" id="top">
+      <div className="orb orb-blue orb-1" data-speed="0.3" aria-hidden="true" />
+      <div className="orb orb-paper orb-2" data-speed="-0.2" aria-hidden="true" />
       <div className="shell">
         <div className="hero-top">
           <p className="hero-kick">

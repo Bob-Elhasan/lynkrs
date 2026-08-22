@@ -10,7 +10,7 @@ import Modules from "@/components/Modules";
 import Partnership from "@/components/Partnership";
 import Closer from "@/components/Closer";
 import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
+import SiteFX from "@/components/SiteFX";
 
 export default function Home() {
   return (
@@ -27,7 +27,7 @@ export default function Home() {
       <Partnership />
       <Closer />
       <Footer />
-      <ScrollReveal />
+      <SiteFX />
     </>
   );
 }

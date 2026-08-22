@@ -1,0 +1,60 @@
+/* ══════════════════════════════════════════
+   LYNKRS — scroll fx layer
+   Progress bar · grain · cursor · parallax orbs
+   Scrub reveals · staggered entrances · magnetic ctas
+   ══════════════════════════════════════════ */
+
+/* progress bar */
+.fx-progress{position:fixed;top:0;left:0;width:100%;height:3px;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;z-index:200;pointer-events:none}
+
+/* grain overlay */
+.fx-grain{position:fixed;inset:-100px;z-index:150;opacity:.035;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px 180px}
+
+/* cursor dot */
+.fx-cursor{position:fixed;top:0;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:999px;background:var(--blue);z-index:300;pointer-events:none;mix-blend-mode:difference;transition:width .25s cubic-bezier(.2,.8,.2,1),height .25s cubic-bezier(.2,.8,.2,1),margin .25s cubic-bezier(.2,.8,.2,1);will-change:transform}
+.fx-cursor.big{width:46px;height:46px;margin:-23px 0 0 -23px}
+@media(pointer:coarse){.fx-cursor{display:none}}
+
+/* ambient parallax orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:-1;will-change:transform}
+.orb-blue{background:radial-gradient(circle,rgba(57,112,182,.42),transparent 70%)}
+.orb-paper{background:radial-gradient(circle,rgba(143,176,214,.28),transparent 70%)}
+.hero .orb-1{width:520px;height:520px;top:-140px;right:-120px}
+.hero .orb-2{width:380px;height:380px;bottom:-100px;left:-140px}
+.position .orb-1{width:460px;height:460px;top:10%;right:-160px}
+.closer .orb-1{width:640px;height:640px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.6}
+
+/* scrub-owned reveal (opacity fully driven by JS, no CSS transform to avoid fighting GSAP scale) */
+.fx-scrub{opacity:0}
+
+/* staggered item entrance — shares the .rv treatment, batched individually */
+.stg{opacity:0;transform:translateY(24px)}
+
+/* shared reveal transition (rv already declared in homepage.css; extend to stg) */
+.stg{transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.stg.in{opacity:1;transform:none}
+
+/* method timeline */
+.method .steps{position:relative}
+.method .timeline-track{position:absolute;left:23px;top:0;bottom:0;width:2px;background:var(--line);z-index:0}
+.method .timeline-fill{position:absolute;left:23px;top:0;width:2px;height:100%;background:var(--blue);transform-origin:top;transform:scaleY(0);z-index:0}
+.method .step{position:relative;z-index:1}
+.method .sn{background:var(--paper-2);transition:background .3s,color .3s,border-color .3s,transform .3s}
+.method .step.active .sn{background:var(--blue);color:#fff;border-color:var(--blue);transform:scale(1.08)}
+
+/* partnership flow draw */
+.partner .flow{position:relative}
+
+/* magnetic buttons */
+.btn,.topcta{will-change:transform}
+
+@media(max-width:900px){
+  .orb{display:none}
+  .fx-progress{height:2px}
+}
+@media(prefers-reduced-motion:reduce){
+  .fx-grain,.fx-cursor,.fx-progress,.orb{display:none}
+  .fx-scrub,.stg{opacity:1;transform:none}
+}

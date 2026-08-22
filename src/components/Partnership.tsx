@@ -23,9 +23,9 @@ export default function Partnership() {
             </p>
             <p>We operate as a strategic extension of your team. Here&apos;s how it runs:</p>
           </div>
-          <div className="flow rv">
+          <div className="flow">
             {FLOW.map((step, i) => (
-              <div className={`flow-step${i === FLOW.length - 1 ? " final" : ""}`} key={step}>
+              <div className={`flow-step stg${i === FLOW.length - 1 ? " final" : ""}`} key={step}>
                 <span className="fk"></span>
                 <span>{step}</span>
               </div>

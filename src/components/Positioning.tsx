@@ -1,12 +1,13 @@
 export default function Positioning() {
   return (
     <section className="dark position">
+      <div className="orb orb-blue orb-1" data-speed="0.25" aria-hidden="true" />
       <div className="shell">
         <div className="meta">
           <span className="idx">02</span>
           <span className="lbl">Our positioning</span>
         </div>
-        <p className="position-quote rv">
+        <p className="position-quote fx-scrub">
           We don&apos;t optimise isolated channels. We design and operate{" "}
           <span className="hl">growth systems</span> — where performance is predictable, learning is
           continuous, and spend becomes an investment.

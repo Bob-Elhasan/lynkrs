@@ -1,9 +1,10 @@
 export default function Closer() {
   return (
     <section className="closer" id="contact">
+      <div className="orb orb-blue orb-1" aria-hidden="true" />
       <div className="shell">
         <p className="eyebrow rv">Ready when you are</p>
-        <h2 className="rv">
+        <h2 className="fx-scrub">
           Turn marketing spend into <span className="hl">sustainable, scalable</span> growth.
         </h2>
         <p className="sub rv">Tell us the objective. We&apos;ll tell you what it takes — and then we&apos;ll go do it.</p>
