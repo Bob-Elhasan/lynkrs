@@ -7,32 +7,36 @@ import { FlightScene } from "@/three/flight-scene";
 /**
  * Captions gated on flight progress, mirroring wlt.design's `roomProgress`
  * anchors (they fire at 14/18/34/38/56/62% of the camera clip).
+ *
+ * The windows are contiguous rather than spaced: a gap between them reads as
+ * a dead stretch of scrolling, which is especially costly on mobile where the
+ * whole flight is a shorter distance.
  */
 const CAPTIONS = [
   {
-    at: 0.04,
-    until: 0.24,
+    at: 0.02,
+    until: 0.26,
     kicker: "01 — Not vanity metrics",
     h: "Performance must serve business objectives.",
     p: "If a number doesn't move the business, it doesn't belong in the report.",
   },
   {
-    at: 0.28,
-    until: 0.48,
+    at: 0.26,
+    until: 0.50,
     kicker: "02 — Signal over noise",
     h: "Data should guide decisions, not fill reports.",
     p: "Every dashboard we build exists to settle a question someone actually asked.",
   },
   {
-    at: 0.52,
-    until: 0.72,
+    at: 0.50,
+    until: 0.74,
     kicker: "03 — Ideas with a job",
     h: "Creativity works best when it's accountable.",
     p: "Concepts are briefed against outcomes, tested in market, and kept or cut.",
   },
   {
-    at: 0.76,
-    until: 0.98,
+    at: 0.74,
+    until: 1,
     kicker: "04 — Short & long term",
     h: "Sustainable growth balances results with equity.",
     p: "We scale what compounds instead of borrowing from next quarter.",

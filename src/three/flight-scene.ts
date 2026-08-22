@@ -43,17 +43,26 @@ export class FlightScene {
   private drift = new THREE.Vector2();
 
   private reducedMotion: boolean;
+  /** Small screens get lighter geometry and a lower pixel ratio. */
+  private lite: boolean;
+  /** Touch devices: ignore height-only resizes (URL bar show/hide). */
+  private coarse: boolean;
+  private lastW = 0;
 
   constructor(canvas: HTMLCanvasElement, reducedMotion = false) {
     this.reducedMotion = reducedMotion;
+    this.lite = window.innerWidth < 900;
+    this.coarse = window.matchMedia("(pointer: coarse)").matches;
+    this.lastW = window.innerWidth;
 
     this.renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !this.lite,
       alpha: true,
       powerPreference: "high-performance",
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // A phone at dpr 3 would otherwise rasterise ~1M px/frame for this scene.
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.lite ? 1.5 : 2));
     this.renderer.setSize(window.innerWidth, window.innerHeight, false);
 
     this.scene = new THREE.Scene();
@@ -89,7 +98,7 @@ export class FlightScene {
     this.onResize = this.onResize.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     window.addEventListener("resize", this.onResize);
-    window.addEventListener("pointermove", this.onPointerMove, { passive: true });
+    if (!this.coarse) window.addEventListener("pointermove", this.onPointerMove, { passive: true });
   }
 
   /** Portal frames receding down the corridor, tinted per zone. */
@@ -97,7 +106,7 @@ export class FlightScene {
     // 4 radial segments makes a square ring; the +45° base roll below turns the
     // diamond upright so the frames read as architectural portals.
     const frameGeo = new THREE.TorusGeometry(1, 0.022, 6, 4);
-    const COUNT = 54;
+    const COUNT = this.lite ? 32 : 54;
 
     const frameMat = new THREE.MeshBasicMaterial({
       transparent: true,
@@ -149,7 +158,7 @@ export class FlightScene {
       transparent: true,
       opacity: 0.85,
     });
-    const BOXES = 90;
+    const BOXES = this.lite ? 40 : 90;
     const boxes = new THREE.InstancedMesh(boxGeo, boxMat, BOXES);
     for (let i = 0; i < BOXES; i++) {
       const t = i / BOXES;
@@ -180,7 +189,7 @@ export class FlightScene {
       depthWrite: false,
       side: THREE.DoubleSide,
     });
-    const STRIPS = 46;
+    const STRIPS = this.lite ? 24 : 46;
     const strips = new THREE.InstancedMesh(stripGeo, stripMat, STRIPS);
     for (let i = 0; i < STRIPS; i++) {
       const t = i / STRIPS;
@@ -198,7 +207,7 @@ export class FlightScene {
     this.trash.push(stripGeo, stripMat);
 
     // Faint ground grid for a floor reference under the flight.
-    const grid = new THREE.GridHelper(DEPTH * 1.4, 90, ACCENT_DEEP, 0x141821);
+    const grid = new THREE.GridHelper(DEPTH * 1.4, this.lite ? 40 : 90, ACCENT_DEEP, 0x141821);
     grid.position.set(0, -14, -DEPTH / 2);
     const gm = grid.material as THREE.Material;
     gm.transparent = true;
@@ -213,7 +222,7 @@ export class FlightScene {
    */
   private buildParticles() {
     const pts: THREE.Vector3[] = [];
-    for (let i = 0; i < 260; i++) {
+    for (let i = 0; i < (this.lite ? 110 : 260); i++) {
       pts.push(
         new THREE.Vector3(
           (Math.random() - 0.5) * 90,
@@ -226,7 +235,8 @@ export class FlightScene {
     this.trash.push(geo);
 
     const sizes = [0.34, 0.2, 0.46, 0.22, 0.28];
-    for (let i = 0; i < 5; i++) {
+    const groups = this.lite ? 3 : 5;
+    for (let i = 0; i < groups; i++) {
       const mat = new THREE.PointsMaterial({
         size: sizes[i],
         color: i % 2 === 0 ? ACCENT_PALE : ACCENT,
@@ -267,6 +277,10 @@ export class FlightScene {
   }
 
   private onResize() {
+    // On phones the URL bar collapsing fires resize constantly with only the
+    // height changing; re-sizing the drawing buffer for that is pure jank.
+    if (this.coarse && window.innerWidth === this.lastW) return;
+    this.lastW = window.innerWidth;
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight, false);

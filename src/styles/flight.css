@@ -5,7 +5,9 @@
    ══════════════════════════════════════════ */
 
 .flight{position:relative;height:900vh;background:#08090c}
-.flight-stage{position:sticky;top:0;height:100vh;overflow:hidden;
+/* svh keeps the pinned stage stable while a mobile URL bar collapses;
+   vh is the fallback for browsers without the small-viewport units. */
+.flight-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   perspective:1200px;perspective-origin:50% 50%}
 .flight-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -42,8 +44,19 @@
   clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 @media(max-width:900px){
-  .flight{height:600vh}
-  .flight-cap{left:var(--pad);right:var(--pad);max-width:none}
+  .flight{height:520vh}
+  /* the copy is a bottom-anchored panel here, so flying it through the
+     camera would scale its scrim along with it — keep it flat */
+  .flight-copy{transform:none!important;perspective:none}
+  /* anchored low so the corridor's vanishing point stays visible above it,
+     with a scrim to keep the copy readable over a bright frame */
+  .flight-cap{left:0;right:0;top:auto;bottom:0;translate:none;max-width:none;
+    padding:28px var(--pad) calc(28px + env(safe-area-inset-bottom));
+    background:linear-gradient(0deg,rgba(8,9,12,.94) 45%,transparent)}
+  .flight-cap h2{font-size:clamp(1.6rem,7vw,2.4rem)}
+  .flight-cap p{font-size:.95rem;max-width:none}
+  .fc-kick{margin-bottom:12px;font-size:.66rem}
+  .flight-vignette{background:linear-gradient(0deg,rgba(8,9,12,.55),transparent 45%)}
   .flight-hud{display:none}
 }
 @media(prefers-reduced-motion:reduce){

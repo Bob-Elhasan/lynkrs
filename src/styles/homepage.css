@@ -244,5 +244,23 @@ footer{background:#000;color:#8f8a80;padding-block:clamp(40px,5vw,64px);border-t
   .method-intro .sticky{position:static}
   .phil-row{grid-template-columns:auto 1fr}.phil-row .tag{display:none}
   .foot-grid{gap:32px}
+  /* The hero headline rewraps on narrow screens and the handwritten
+     annotations, which are absolutely positioned against the desktop
+     line breaks, end up sitting on top of the words. They're decorative,
+     so drop them rather than fight the wrap. */
+  .annot{display:none}
+  .hero{padding-top:clamp(112px,16vh,150px)}
+  .hero-h1{max-width:none;letter-spacing:-.035em}
+  .hero-top{gap:14px}
+  .hero-est{text-align:left}
+  .statement p,.position-quote{max-width:none}
+}
+@media(max-width:560px){
+  /* keep the wordmark and CTA from colliding: arrow only */
+  .topcta{font-size:0;gap:0}
+  .topcta .arw{width:34px;height:34px}
+  .topcta .arw svg{width:13px;height:13px}
+  .topbar.pill .topcta{padding:6px;border-radius:999px}
+  :root{--fs-mega:clamp(2.5rem,10vw,4rem)}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
