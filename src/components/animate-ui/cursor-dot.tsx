@@ -22,7 +22,7 @@ export function CursorDot() {
 
     const grow = () => setBig(true);
     const shrink = () => setBig(false);
-    const hoverables = document.querySelectorAll("a, button, .btn, .pcard, .cost, .mod-head");
+    const hoverables = document.querySelectorAll("a, button, .btn, .rail-card, .cost, .mod-head");
     hoverables.forEach((h) => {
       h.addEventListener("mouseenter", grow);
       h.addEventListener("mouseleave", shrink);

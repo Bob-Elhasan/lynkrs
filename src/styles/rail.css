@@ -1,0 +1,37 @@
+/* ══════════════════════════════════════════
+   RAIL — pinned horizontal scroll section
+   Vertical scroll translates the track on X,
+   matching wlt.design's pinned services rail.
+   ══════════════════════════════════════════ */
+
+.rail{position:relative;height:320vh;background:var(--paper-2)}
+.rail-stage{position:sticky;top:0;height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:clamp(28px,4vw,56px)}
+.rail-head{padding-inline:var(--pad);max-width:var(--max);margin-inline:auto;width:100%}
+.rail-head h2{font-size:clamp(1.9rem,4vw,3.4rem);max-width:18ch;margin-bottom:14px}
+.rail-head .sub{color:var(--ink-soft);max-width:40ch}
+.rail-head .meta{margin-bottom:clamp(20px,3vw,40px)}
+
+.rail-track{display:flex;gap:24px;padding-inline:var(--pad);will-change:transform}
+.rail-card{flex:0 0 min(58vw,620px);border:1px solid var(--line);border-radius:24px;
+  padding:clamp(28px,3vw,44px);background:var(--paper);display:flex;flex-direction:column;
+  gap:18px;min-height:min(46vh,420px);transition:border-color .3s,box-shadow .3s}
+.rail-card:hover{border-color:var(--blue);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.rail-card h3{font-size:clamp(1.5rem,2.4vw,2.2rem);letter-spacing:-.03em}
+.rail-card .voice{font-family:var(--font-caveat),cursive;font-weight:700;
+  font-size:clamp(1.4rem,2vw,1.9rem);color:var(--ink);line-height:1.15}
+.rail-card p{color:var(--ink-soft);line-height:1.55}
+.rail-card p:last-child{margin-top:auto}
+
+@media(max-width:900px){
+  .rail{height:auto}
+  .rail-stage{position:static;height:auto;padding-block:clamp(70px,9vw,120px)}
+  .rail-track{flex-direction:column;transform:none!important}
+  .rail-card{flex:1 1 auto;min-height:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .rail{height:auto}
+  .rail-stage{position:static;height:auto;padding-block:80px}
+  .rail-track{flex-direction:column;transform:none!important}
+  .rail-card{flex:1 1 auto;min-height:0}
+}

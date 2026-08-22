@@ -1,28 +1,31 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Statement from "@/components/Statement";
+import Flight from "@/components/Flight";
 import Problem from "@/components/Problem";
 import Positioning from "@/components/Positioning";
-import Philosophy from "@/components/Philosophy";
 import Method from "@/components/Method";
-import Suite from "@/components/Suite";
+import Rail from "@/components/Rail";
 import Modules from "@/components/Modules";
 import Partnership from "@/components/Partnership";
 import Closer from "@/components/Closer";
 import Footer from "@/components/Footer";
 import SiteFX from "@/components/SiteFX";
+import Preloader from "@/components/Preloader";
 
 export default function Home() {
   return (
     <>
+      <Preloader />
       <Header />
       <Hero />
       <Statement />
+      {/* Scroll-scrubbed 3D flight — carries the growth philosophy in-scene. */}
+      <Flight />
       <Problem />
       <Positioning />
-      <Philosophy />
       <Method />
-      <Suite />
+      <Rail />
       <Modules />
       <Partnership />
       <Closer />
