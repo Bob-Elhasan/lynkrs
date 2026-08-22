@@ -1,4 +1,5 @@
 import { Effect, Effects } from "@/components/animate-ui/effect";
+import { Parallax } from "@/components/animate-ui/scroll-scrub";
 
 const COSTS = [
   {
@@ -21,6 +22,7 @@ const COSTS = [
 export default function Problem() {
   return (
     <section className="problem" id="problem">
+      <Parallax speed={0.2} className="orb orb-blue orb-1" aria-hidden="true" />
       <div className="shell">
         <div className="meta">
           <span className="idx">01</span>

@@ -1,4 +1,5 @@
 import { Effect, Effects } from "@/components/animate-ui/effect";
+import { Parallax } from "@/components/animate-ui/scroll-scrub";
 
 const PRODUCTS = [
   {
@@ -34,6 +35,7 @@ const PRODUCTS = [
 export default function Suite() {
   return (
     <section className="suite" id="suite">
+      <Parallax speed={-0.2} className="orb orb-paper orb-1" aria-hidden="true" />
       <div className="shell">
         <div className="meta">
           <span className="idx">05</span>

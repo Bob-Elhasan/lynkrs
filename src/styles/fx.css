@@ -5,26 +5,29 @@
    ══════════════════════════════════════════ */
 
 /* progress bar */
-.fx-progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:200;pointer-events:none}
+.fx-progress{position:fixed;top:0;left:0;height:3px;background:var(--grad);z-index:200;pointer-events:none}
 
 /* grain overlay */
-.fx-grain{position:fixed;inset:-100px;z-index:150;opacity:.035;mix-blend-mode:overlay;pointer-events:none;
+.fx-grain{position:fixed;inset:-100px;z-index:150;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size:180px 180px}
 
-/* cursor dot */
-.fx-cursor{position:fixed;top:0;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:999px;background:var(--blue);z-index:300;pointer-events:none;mix-blend-mode:difference;transition:width .25s cubic-bezier(.2,.8,.2,1),height .25s cubic-bezier(.2,.8,.2,1),margin .25s cubic-bezier(.2,.8,.2,1);will-change:transform}
-.fx-cursor.big{width:46px;height:46px;margin:-23px 0 0 -23px}
+/* cursor dot — screen blend makes it glow against the dark canvas */
+.fx-cursor{position:fixed;top:0;left:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:999px;background:var(--blue);filter:blur(3px);z-index:300;pointer-events:none;mix-blend-mode:screen;transition:width .25s cubic-bezier(.2,.8,.2,1),height .25s cubic-bezier(.2,.8,.2,1),margin .25s cubic-bezier(.2,.8,.2,1);will-change:transform}
+.fx-cursor.big{width:50px;height:50px;margin:-25px 0 0 -25px}
 @media(pointer:coarse){.fx-cursor{display:none}}
 
 /* ambient parallax orbs */
-.orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:-1;will-change:transform}
-.orb-blue{background:radial-gradient(circle,rgba(57,112,182,.42),transparent 70%)}
-.orb-paper{background:radial-gradient(circle,rgba(143,176,214,.28),transparent 70%)}
-.hero .orb-1{width:520px;height:520px;top:-140px;right:-120px}
-.hero .orb-2{width:380px;height:380px;bottom:-100px;left:-140px}
-.position .orb-1{width:460px;height:460px;top:10%;right:-160px}
-.closer .orb-1{width:640px;height:640px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.6}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:-1;will-change:transform}
+.orb-blue{background:radial-gradient(circle,rgba(223,68,24,.5),transparent 70%)}
+.orb-paper{background:radial-gradient(circle,rgba(255,144,0,.32),transparent 70%)}
+.hero .orb-1{width:560px;height:560px;top:-160px;right:-140px}
+.hero .orb-2{width:400px;height:400px;bottom:-100px;left:-140px}
+.position .orb-1{width:480px;height:480px;top:10%;right:-160px}
+.problem .orb-1{width:500px;height:500px;bottom:-200px;left:-160px}
+.suite .orb-1{width:460px;height:460px;top:-120px;right:-140px}
+.partner .orb-1{width:440px;height:440px;bottom:-160px;right:-120px}
+.closer .orb-1{width:680px;height:680px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.65}
 
 /* method timeline */
 .method .steps{position:relative}

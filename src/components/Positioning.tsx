@@ -3,7 +3,7 @@ import { ScrollScale, Parallax } from "@/components/animate-ui/scroll-scrub";
 
 export default function Positioning() {
   return (
-    <section className="dark position">
+    <section className="position">
       <Parallax speed={0.25} className="orb orb-blue orb-1" aria-hidden="true" />
       <div className="shell">
         <div className="meta">
