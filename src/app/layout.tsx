@@ -1,24 +1,13 @@
 import type { Metadata } from "next";
-import { Archivo, Inter, Roboto_Mono, Caveat } from "next/font/google";
+import { Josefin_Sans, Caveat } from "next/font/google";
 import { MotionConfig } from "motion/react";
 import "./globals.css";
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+// Brand typeface, per the production spec.
+const josefin = Josefin_Sans({
+  variable: "--font-josefin",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800", "900"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-roboto-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const caveat = Caveat({
@@ -28,19 +17,12 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Lynkrs — We build growth, not campaigns",
+  title: "Lynkrs — Growth is designed, not guessed",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${archivo.variable} ${inter.variable} ${robotoMono.variable} ${caveat.variable}`}
-    >
+    <html lang="en" className={`${josefin.variable} ${caveat.variable}`}>
       <body>
         <MotionConfig reducedMotion="user">{children}</MotionConfig>
       </body>
