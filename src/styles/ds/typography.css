@@ -1,0 +1,4 @@
+:root{--font-display:'Archivo',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif;--font-mono:'Roboto Mono',monospace;
+--text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-lg:1.25rem;--text-xl:1.5rem;--text-2xl:2rem;--text-3xl:2.5rem;--text-4xl:3.5rem;--text-5xl:5rem;
+--weight-regular:400;--weight-medium:500;--weight-semibold:600;--weight-bold:700;--weight-black:900;
+--leading-tight:1.1;--leading-normal:1.5;--leading-relaxed:1.7;--tracking-tight:-0.02em;--tracking-normal:0;}
