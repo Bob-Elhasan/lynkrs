@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Inter, Roboto_Mono, Caveat } from "next/font/google";
+import { MotionConfig } from "motion/react";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -40,7 +41,9 @@ export default function RootLayout({
       lang="en"
       className={`${archivo.variable} ${inter.variable} ${robotoMono.variable} ${caveat.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <MotionConfig reducedMotion="user">{children}</MotionConfig>
+      </body>
     </html>
   );
 }

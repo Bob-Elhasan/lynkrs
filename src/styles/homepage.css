@@ -240,10 +240,6 @@ footer{background:var(--ink);color:#8f8a80;padding-block:clamp(40px,5vw,64px);bo
 .foot-col a:hover{color:#fff}
 .foot-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--font-mono);font-size:.74rem;letter-spacing:.06em;padding-top:26px;border-top:1px solid #2a2620}
 
-/* reveal */
-.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
-.rv.in{opacity:1;transform:none}
-
 @media(max-width:900px){
   .topnav{display:none}
   .hero-foot,.problem-head,.method-grid,.suite-grid,.suite-head,.partner-grid,.position-foot,.statement-grid,.mod-content,.foot-grid{grid-template-columns:1fr}
@@ -252,4 +248,4 @@ footer{background:var(--ink);color:#8f8a80;padding-block:clamp(40px,5vw,64px);bo
   .phil-row{grid-template-columns:auto 1fr}.phil-row .tag{display:none}
   .foot-grid{gap:32px}
 }
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

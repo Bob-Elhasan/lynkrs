@@ -1,3 +1,5 @@
+import { Effect, Effects } from "@/components/animate-ui/effect";
+
 const PRODUCTS = [
   {
     rn: "01",
@@ -38,21 +40,29 @@ export default function Suite() {
           <span className="lbl">The Growth™ Suite</span>
         </div>
         <div className="suite-head">
-          <h2 className="rv">Four products. Four stages of growth.</h2>
-          <p className="rv sub">Start wherever you are — each one hands off cleanly to the next.</p>
+          <Effect asChild fade slide>
+            <h2>Four products. Four stages of growth.</h2>
+          </Effect>
+          <Effect asChild fade slide delay={100}>
+            <p className="sub">Start wherever you are — each one hands off cleanly to the next.</p>
+          </Effect>
         </div>
         <div className="suite-grid">
-          {PRODUCTS.map((p) => (
-            <div className="pcard stg" key={p.rn}>
-              <div className="pcard-top">
-                <span className="stage">{p.stage}</span>
-                <span className="rn">{p.rn}</span>
+          {/* fade + blur only (no slide/zoom): those set a transform Motion would keep
+              inline forever, permanently overriding the CSS :hover lift on .pcard */}
+          <Effects asChild fade blur holdDelay={90}>
+            {PRODUCTS.map((p) => (
+              <div className="pcard" key={p.rn}>
+                <div className="pcard-top">
+                  <span className="stage">{p.stage}</span>
+                  <span className="rn">{p.rn}</span>
+                </div>
+                <h3>{p.title}</h3>
+                <p className="voice">{p.voice}</p>
+                <p>{p.body}</p>
               </div>
-              <h3>{p.title}</h3>
-              <p className="voice">{p.voice}</p>
-              <p>{p.body}</p>
-            </div>
-          ))}
+            ))}
+          </Effects>
         </div>
       </div>
     </section>

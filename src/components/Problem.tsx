@@ -1,3 +1,5 @@
+import { Effect, Effects } from "@/components/animate-ui/effect";
+
 const COSTS = [
   {
     n: "COST 01",
@@ -25,34 +27,40 @@ export default function Problem() {
           <span className="lbl">The problem</span>
         </div>
         <div className="problem-head">
-          <h2 className="rv">
-            Most marketing doesn&apos;t fail from lack of activity. It fails from fragmentation.
-          </h2>
-          <p className="rv">
-            Different agencies, different objectives, no shared accountability. The hidden cost shows up
-            everywhere at once.
-          </p>
+          <Effect asChild fade slide>
+            <h2>Most marketing doesn&apos;t fail from lack of activity. It fails from fragmentation.</h2>
+          </Effect>
+          <Effect asChild fade slide delay={100}>
+            <p>
+              Different agencies, different objectives, no shared accountability. The hidden cost shows up
+              everywhere at once.
+            </p>
+          </Effect>
         </div>
         <div className="costs">
-          {COSTS.map((c) => (
-            <div className="cost stg" key={c.n}>
-              <span className="n">{c.n}</span>
-              <span className="plus">+</span>
-              <h3>{c.title}</h3>
-              <p>{c.body}</p>
-            </div>
-          ))}
-          <div className="cost wide stg">
-            <span className="n">THE RESULT</span>
-            <h3>Marketing becomes a cost — not an investment.</h3>
-            <p>Short-term wins with no system underneath. Nothing compounds, nothing scales.</p>
-          </div>
-          <div className="cost stg">
-            <span className="n">COST 04</span>
-            <span className="plus">+</span>
-            <h3>Limited scalability</h3>
-            <p>Spikes look good in a report, but there&apos;s no infrastructure to carry them to the next stage.</p>
-          </div>
+          <Effects asChild fade slide holdDelay={80}>
+            {[
+              ...COSTS.map((c) => (
+                <div className="cost" key={c.n}>
+                  <span className="n">{c.n}</span>
+                  <span className="plus">+</span>
+                  <h3>{c.title}</h3>
+                  <p>{c.body}</p>
+                </div>
+              )),
+              <div className="cost wide" key="result">
+                <span className="n">THE RESULT</span>
+                <h3>Marketing becomes a cost — not an investment.</h3>
+                <p>Short-term wins with no system underneath. Nothing compounds, nothing scales.</p>
+              </div>,
+              <div className="cost" key="cost04">
+                <span className="n">COST 04</span>
+                <span className="plus">+</span>
+                <h3>Limited scalability</h3>
+                <p>Spikes look good in a report, but there&apos;s no infrastructure to carry them to the next stage.</p>
+              </div>,
+            ]}
+          </Effects>
         </div>
       </div>
     </section>

@@ -1,3 +1,5 @@
+import { Effects } from "@/components/animate-ui/effect";
+
 const ROWS = [
   { rn: "01", title: "Performance must serve business objectives", tag: "Not vanity metrics" },
   { rn: "02", title: "Data should guide decisions, not fill reports", tag: "Signal over noise" },
@@ -14,13 +16,15 @@ export default function Philosophy() {
           <span className="lbl">Growth philosophy</span>
         </div>
         <div className="phil-list">
-          {ROWS.map((r) => (
-            <div className="phil-row stg" key={r.rn}>
-              <span className="rn">{r.rn}</span>
-              <h3>{r.title}</h3>
-              <span className="tag">{r.tag}</span>
-            </div>
-          ))}
+          <Effects asChild fade slide holdDelay={70}>
+            {ROWS.map((r) => (
+              <div className="phil-row" key={r.rn}>
+                <span className="rn">{r.rn}</span>
+                <h3>{r.title}</h3>
+                <span className="tag">{r.tag}</span>
+              </div>
+            ))}
+          </Effects>
         </div>
       </div>
     </section>

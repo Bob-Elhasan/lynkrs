@@ -1,3 +1,7 @@
+import { Effect } from "@/components/animate-ui/effect";
+import { ScrollFill } from "@/components/animate-ui/scroll-scrub";
+import { MethodStep } from "@/components/MethodStep";
+
 const STEPS = [
   {
     title: "Discovery & diagnosis",
@@ -31,25 +35,21 @@ export default function Method() {
         </div>
         <div className="method-grid">
           <div className="method-intro">
-            <div className="sticky rv">
-              <h2>Five steps, one system.</h2>
-              <p>
-                Structured, transparent, goal-oriented and performance-driven — from first diagnosis to the
-                decision to scale.
-              </p>
-            </div>
+            <Effect asChild fade slide>
+              <div className="sticky">
+                <h2>Five steps, one system.</h2>
+                <p>
+                  Structured, transparent, goal-oriented and performance-driven — from first diagnosis to the
+                  decision to scale.
+                </p>
+              </div>
+            </Effect>
           </div>
           <div className="steps">
             <div className="timeline-track" aria-hidden="true" />
-            <div className="timeline-fill" aria-hidden="true" />
-            {STEPS.map((s) => (
-              <div className="step stg" key={s.title}>
-                <span className="sn"></span>
-                <div>
-                  <h3>{s.title}</h3>
-                  <p>{s.body}</p>
-                </div>
-              </div>
+            <ScrollFill className="timeline-fill" />
+            {STEPS.map((s, i) => (
+              <MethodStep key={s.title} index={i} title={s.title} body={s.body} />
             ))}
           </div>
         </div>

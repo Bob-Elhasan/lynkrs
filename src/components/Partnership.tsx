@@ -1,3 +1,5 @@
+import { Effect, Effects } from "@/components/animate-ui/effect";
+
 const FLOW = [
   "You set the objectives",
   "Lynkrs assesses the situation",
@@ -14,22 +16,28 @@ export default function Partnership() {
           <span className="lbl">Partnership model</span>
         </div>
         <div className="partner-grid">
-          <div className="partner-copy rv">
-            <h2>We don&apos;t chase volume. We build growth.</h2>
-            <p>
-              Most agencies work on a strict retainer —{" "}
-              <span className="strike">flat rate, service vs. value, rate card</span>. It adds dependencies
-              and blockages, so we abolished the model entirely.
-            </p>
-            <p>We operate as a strategic extension of your team. Here&apos;s how it runs:</p>
-          </div>
+          <Effect asChild fade slide>
+            <div className="partner-copy">
+              <h2>We don&apos;t chase volume. We build growth.</h2>
+              <p>
+                Most agencies work on a strict retainer —{" "}
+                <span className="strike">flat rate, service vs. value, rate card</span>. It adds dependencies
+                and blockages, so we abolished the model entirely.
+              </p>
+              <p>We operate as a strategic extension of your team. Here&apos;s how it runs:</p>
+            </div>
+          </Effect>
           <div className="flow">
-            {FLOW.map((step, i) => (
-              <div className={`flow-step stg${i === FLOW.length - 1 ? " final" : ""}`} key={step}>
-                <span className="fk"></span>
-                <span>{step}</span>
-              </div>
-            ))}
+            {/* fade + blur only: .flow-step has its own CSS :hover translateX, which a
+                Motion-owned transform (from slide/zoom) would permanently override */}
+            <Effects asChild fade blur holdDelay={80}>
+              {FLOW.map((step, i) => (
+                <div className={`flow-step${i === FLOW.length - 1 ? " final" : ""}`} key={step}>
+                  <span className="fk"></span>
+                  <span>{step}</span>
+                </div>
+              ))}
+            </Effects>
           </div>
         </div>
       </div>

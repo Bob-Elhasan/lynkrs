@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Magnetic } from "@/components/animate-ui/magnetic";
 
 const NAV_LINKS = [
   { href: "#problem", label: "The problem" },
@@ -42,14 +43,16 @@ export default function Header() {
             </a>
           ))}
         </nav>
-        <a className="topcta" href="#contact">
-          Start a conversation
-          <span className="arw">
-            <svg viewBox="0 0 24 24">
-              <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </a>
+        <Magnetic asChild strength={0.4}>
+          <a className="topcta" href="#contact">
+            Start a conversation
+            <span className="arw">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </a>
+        </Magnetic>
       </div>
     </header>
   );

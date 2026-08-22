@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Effect } from "@/components/animate-ui/effect";
 
 const MODULES = [
   {
@@ -66,7 +67,7 @@ export default function Modules() {
           <span className="idx">06</span>
           <span className="lbl">Our modules</span>
         </div>
-        <div className="rv">
+        <Effect fade slide>
           {MODULES.map((m, i) => (
             <div className={`mod${open === i ? " open" : ""}`} key={m.mn}>
               <button
@@ -100,7 +101,7 @@ export default function Modules() {
               </div>
             </div>
           ))}
-        </div>
+        </Effect>
       </div>
     </section>
   );
