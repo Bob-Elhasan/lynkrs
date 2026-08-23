@@ -1,21 +1,15 @@
-import Scene, { Step } from "@/components/Scene";
-
 export default function Statement() {
   return (
-    <Scene className="statement" depth="240vh">
-      <Step from={0.06} to={0.22}>
-        <p className="scene-quote">You&apos;re busy running the business.</p>
-      </Step>
-      <Step from={0.3} to={0.46}>
-        <p className="scene-quote">
+    <section className="statement">
+      <div className="shell">
+        <p className="rv">You&apos;re busy running the business.</p>
+        <p className="rv" data-delay="90">
           <span className="em">We run the growth.</span>
         </p>
-      </Step>
-      <Step from={0.54} to={0.72}>
-        <p className="scene-quote muted">
-          Strategy, media, content and SEO under one objective: structured, measurable and scalable.
+        <p className="muted rv" data-delay="180">
+          Strategy, media, content and SEO, all pulling towards the same number.
         </p>
-      </Step>
-    </Scene>
+      </div>
+    </section>
   );
 }

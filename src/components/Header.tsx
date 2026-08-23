@@ -1,20 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Magnetic } from "@/components/animate-ui/magnetic";
 
 const NAV_LINKS = [
   { href: "#problem", label: "The problem" },
   { href: "#method", label: "How we work" },
   { href: "#suite", label: "Growth Suite" },
-  { href: "#modules", label: "Modules" },
-  { href: "#partner", label: "Partnership" },
+  { href: "#modules", label: "What we run" },
+  { href: "#partner", label: "Together" },
 ];
 
 /**
- * Sits below the hero in normal flow, then sticks to the top of the viewport
- * once scrolled past. A zero-height sentinel above it reports when that
- * happens so the bar can take on its condensed glass treatment.
+ * Sits below the hero, then sticks to the top once scrolled past. A zero
+ * height sentinel above it reports when that happens so the bar can pick up
+ * its divider only when it is actually overlapping content.
  */
 export default function Header() {
   const [stuck, setStuck] = useState(false);
@@ -32,11 +31,11 @@ export default function Header() {
 
   return (
     <>
-      <div ref={sentinel} aria-hidden="true" className="topbar-sentinel" />
-      <header className={`topbar${stuck ? " pill" : ""}`} id="topbar">
+      <div ref={sentinel} aria-hidden="true" />
+      <header className={`topbar${stuck ? " stuck" : ""}`}>
         <div className="topbar-in">
-          <a className="brand" href="#top">
-            <span className="wordmark">Lynkrs.</span>
+          <a className="wordmark" href="#top">
+            Lynkrs.
           </a>
           <nav className="topnav">
             {NAV_LINKS.map((l) => (
@@ -45,16 +44,12 @@ export default function Header() {
               </a>
             ))}
           </nav>
-          <Magnetic asChild strength={0.4}>
-            <a className="topcta" href="#contact">
-              Start a conversation
-              <span className="arw">
-                <svg viewBox="0 0 24 24">
-                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </a>
-          </Magnetic>
+          <a className="topcta" href="#contact">
+            <span>Start a conversation</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
         </div>
       </header>
     </>

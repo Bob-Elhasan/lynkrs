@@ -1,33 +1,26 @@
-import Scene, { Step, StepMeta, StepRule } from "@/components/Scene";
-
 export default function Positioning() {
   return (
-    <Scene className="position" depth="300vh">
-      <StepMeta idx="02" label="Our positioning" />
-      {/* The sentence lands in three scroll-driven beats. */}
-      <Step from={0.04} to={0.18}>
-        <p className="scene-quote">We don&apos;t optimise isolated channels.</p>
-      </Step>
-      <Step from={0.24} to={0.4}>
-        <p className="scene-quote">
-          We design and operate <span className="hl">growth systems</span>.
+    <section className="band band-tint">
+      <div className="shell">
+        <div className="meta rv">
+          <span className="idx">02</span>
+          <span className="lbl">Our positioning</span>
+        </div>
+        <p className="position-quote rv">
+          We do not tune channels one at a time. We build{" "}
+          <span className="hl">the whole system</span>, so results hold steady, lessons carry forward, and
+          the money you put in comes back.
         </p>
-      </Step>
-      <Step from={0.46} to={0.6}>
-        <p className="scene-quote muted">
-          Performance is predictable, learning is continuous, and spend becomes an investment.
-        </p>
-      </Step>
-      <StepRule from={0.62} to={0.72} />
-      <Step from={0.7} to={0.84}>
-        <p className="scene-lede">
-          From campaigns to growth systems. Every channel supports the same objective; every decision is
-          guided by data and accountability.
-        </p>
-      </Step>
-      <Step from={0.86} to={0.97} travel={20}>
-        <p className="scene-sig">Growth is designed, not guessed.</p>
-      </Step>
-    </Scene>
+        <div className="position-grid">
+          <p className="position-note rv">
+            Every channel works towards the same goal, and every call we make is one we can explain to you
+            in plain terms.
+          </p>
+          <p className="position-sig rv" data-delay="90">
+            Growth is designed, not guessed.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }

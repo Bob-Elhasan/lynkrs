@@ -1,66 +1,57 @@
-import Scene, { Step, StepMeta, StepRule } from "@/components/Scene";
-
 const COSTS = [
   {
-    n: "COST 01",
-    title: "Reduced efficiency",
-    body: "Media spend runs without strategic direction — budget out the door, little to show for it.",
+    n: "01",
+    title: "Wasted spend",
+    body: "Media runs without a clear brief, so the budget goes out and very little comes back.",
   },
   {
-    n: "COST 02",
-    title: "Inflated CAC",
-    body: "Content gets produced with no performance feedback, so acquisition costs climb instead of fall.",
+    n: "02",
+    title: "Rising costs",
+    body: "Nobody checks what the content actually earns, so winning a customer keeps getting dearer.",
   },
   {
-    n: "COST 03",
-    title: "Slow learning",
-    body: "SEO chases traffic, not revenue. Every month effectively restarts from zero.",
+    n: "03",
+    title: "Starting over",
+    body: "SEO chases traffic instead of revenue, and every month begins from scratch.",
   },
   {
-    n: "COST 04",
-    title: "Limited scalability",
-    body: "Spikes look good in a report, but there's no infrastructure to carry them to the next stage.",
+    n: "04",
+    title: "No room to grow",
+    body: "A good month looks great in a report, but there is nothing underneath it to build on.",
   },
 ];
 
 export default function Problem() {
   return (
-    <Scene id="problem" className="problem" depth="340vh">
-      <StepMeta idx="01" label="The problem" />
-      <Step from={0.04} to={0.16}>
-        <h2 className="scene-h2">
-          Most marketing doesn&apos;t fail from lack of activity. It fails from fragmentation.
-        </h2>
-      </Step>
-      <StepRule from={0.16} to={0.26} />
-      <Step from={0.2} to={0.3}>
-        <p className="scene-lede">
-          Different agencies, different objectives, no shared accountability. The hidden cost shows up
-          everywhere at once.
+    <section className="band" id="problem">
+      <div className="shell">
+        <div className="meta rv">
+          <span className="idx">01</span>
+          <span className="lbl">The problem</span>
+        </div>
+        <div className="head">
+          <h2 className="rv">
+            Most marketing does not fail because nobody is working hard. It fails because nothing is joined
+            up.
+          </h2>
+          <p className="rv" data-delay="80">
+            Different agencies, different targets, and nobody owning the result. You end up paying for that
+            in four places at once.
+          </p>
+        </div>
+        <div className="costs">
+          {COSTS.map((c, i) => (
+            <div className="cost rv" key={c.n} data-delay={i * 70}>
+              <span className="n">{c.n}</span>
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+            </div>
+          ))}
+        </div>
+        <p className="problem-note rv" data-delay="280">
+          Marketing turns into a cost you tolerate instead of an investment you make.
         </p>
-      </Step>
-
-      {/* Each cost is dealt out by a further slice of the scroll. */}
-      <div className="scene-costs">
-        {COSTS.map((c, i) => {
-          const start = 0.36 + i * 0.13;
-          return (
-            <Step key={c.n} from={start} to={start + 0.09} travel={26}>
-              <div className="cost">
-                <span className="n">{c.n}</span>
-                <h3>{c.title}</h3>
-                <p>{c.body}</p>
-              </div>
-            </Step>
-          );
-        })}
       </div>
-
-      <Step from={0.9} to={0.99} travel={22}>
-        <p className="scene-kicker">
-          Marketing becomes a cost — not an investment. Nothing compounds, nothing scales.
-        </p>
-      </Step>
-    </Scene>
+    </section>
   );
 }

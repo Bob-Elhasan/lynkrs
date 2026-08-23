@@ -1,24 +1,17 @@
 import type { Metadata } from "next";
-import { Archivo, Inter, Roboto_Mono, Caveat } from "next/font/google";
-import { MotionConfig } from "motion/react";
+import { Archivo, Inter, Caveat } from "next/font/google";
 import "./globals.css";
 
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800", "900"],
+  weight: ["500", "600", "700"],
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-roboto-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
 });
 
 const caveat = Caveat({
@@ -28,22 +21,15 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Lynkrs — We build growth, not campaigns",
+  title: "Lynkrs. Growth is designed, not guessed",
+  description:
+    "A growth agency that joins strategy, media, content and SEO into one system, so marketing earns its keep.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${archivo.variable} ${inter.variable} ${robotoMono.variable} ${caveat.variable}`}
-    >
-      <body>
-        <MotionConfig reducedMotion="user">{children}</MotionConfig>
-      </body>
+    <html lang="en" className={`${archivo.variable} ${inter.variable} ${caveat.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

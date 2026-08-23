@@ -1,40 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { Effect } from "@/components/animate-ui/effect";
 
 const MODULES = [
   {
     mn: "M/01",
-    title: "Performance & media buying",
+    title: "Performance and media buying",
     outcome: (
       <>
-        Our core execution engine — turning paid media into <span className="em">predictable revenue</span>{" "}
-        through scalable, high-efficiency spend.
+        Where most of the work happens. We turn paid media into{" "}
+        <span className="em">revenue you can count on</span>, without spending more to get it.
       </>
     ),
     items: [
-      "Paid media strategy & execution",
-      "Continuous performance optimisation",
-      "Funnel & conversion optimisation",
-      "Creative testing & iteration",
-      "Budget efficiency & scaling logic",
+      "Paid media strategy and execution",
+      "Ongoing performance work",
+      "Funnel and conversion work",
+      "Creative testing",
+      "Budget efficiency and scaling",
     ],
   },
   {
     mn: "M/02",
-    title: "Content & brand",
+    title: "Content and brand",
     outcome: (
       <>
-        Content as a performance asset, not a creative output — <span className="em">lower CAC, higher ROAS</span>{" "}
-        across every touchpoint.
+        Content that earns its place. Made to bring{" "}
+        <span className="em">costs down and returns up</span>, not just to fill a calendar.
       </>
     ),
     items: [
-      "Social media strategy & planning",
-      "Content storytelling framework",
-      "Visual & written production",
-      "Community engagement & growth",
+      "Social strategy and planning",
+      "Storytelling framework",
+      "Visual and written production",
+      "Community growth",
       "Content performance analysis",
     ],
   },
@@ -43,16 +42,16 @@ const MODULES = [
     title: "SEO revenue system",
     outcome: (
       <>
-        Organic visibility turned into <span className="em">compounding revenue</span> — profitability that
-        doesn&apos;t depend on paid spend.
+        Visibility that <span className="em">keeps paying</span>. Organic growth that does not disappear
+        the day you pause the ads.
       </>
     ),
     items: [
-      "Revenue projection & SEO tracking",
-      "Technical SEO & UX optimisation",
-      "Keyword & search intent strategy",
-      "Content & on-page optimisation",
-      "Authority building & backlinks",
+      "Revenue projection and tracking",
+      "Technical SEO and page experience",
+      "Keyword and search intent",
+      "On page optimisation",
+      "Authority building",
     ],
   },
 ];
@@ -61,47 +60,45 @@ export default function Modules() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="modules" id="modules">
+    <section className="band band-tint" id="modules">
       <div className="shell">
-        <div className="meta">
+        <div className="meta rv">
           <span className="idx">06</span>
-          <span className="lbl">Our modules</span>
+          <span className="lbl">What we run</span>
         </div>
-        <Effect fade slide>
-          {MODULES.map((m, i) => (
-            <div className={`mod${open === i ? " open" : ""}`} key={m.mn}>
-              <button
-                type="button"
-                className="mod-head"
-                aria-expanded={open === i}
-                onClick={() => setOpen(open === i ? -1 : i)}
-              >
-                <span className="mn">{m.mn}</span>
-                <h3>{m.title}</h3>
-                <span className="tog">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-                  </svg>
-                </span>
-              </button>
-              <div className="mod-body">
-                <div className="mod-inner">
-                  <div className="mod-content">
-                    <p className="outcome">{m.outcome}</p>
-                    <ul className="mlist">
-                      {m.items.map((item, idx) => (
-                        <li key={item}>
-                          <span className="mk">{String(idx + 1).padStart(2, "0")}</span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        {MODULES.map((m, i) => (
+          <div className={`mod rv${open === i ? " open" : ""}`} key={m.mn} data-delay={i * 70}>
+            <button
+              type="button"
+              className="mod-head"
+              aria-expanded={open === i}
+              onClick={() => setOpen(open === i ? -1 : i)}
+            >
+              <span className="mn">{m.mn}</span>
+              <h3>{m.title}</h3>
+              <span className="tog" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+                </svg>
+              </span>
+            </button>
+            <div className="mod-body">
+              <div className="mod-inner">
+                <div className="mod-content">
+                  <p className="outcome">{m.outcome}</p>
+                  <ul className="mlist">
+                    {m.items.map((item, idx) => (
+                      <li key={item}>
+                        <span className="mk">{String(idx + 1).padStart(2, "0")}</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
-          ))}
-        </Effect>
+          </div>
+        ))}
       </div>
     </section>
   );
