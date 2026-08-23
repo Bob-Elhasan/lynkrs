@@ -11,8 +11,9 @@
   --paper-3:#ebebe5;
   --ink:#16160f;
   --ink-soft:#55564e;
-  --ink-faint:#6e6f66;
+  --ink-faint:#5d5e56;
   --line:#e2e2da;
+  --line-strong:#8b8b80;
   --line-soft:#eeeee8;
   /* Straight from the brand ramp in ds/colors.css: 500 is the blue of the
      Lynkrs mark, so the logo and the accent are the same colour. Both clear
@@ -53,7 +54,7 @@ section{position:relative}
 /* ── section header ─────────────────────── */
 .meta{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
   padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:clamp(30px,4vw,52px)}
-.meta .idx{font-size:.76rem;font-weight:700;letter-spacing:.08em;color:var(--blue)}
+.meta .idx{font-size:.76rem;font-weight:700;letter-spacing:.08em;color:var(--blue-ink)}
 .meta .lbl{font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
 
 .band{padding-block:var(--gap)}
@@ -116,7 +117,7 @@ section{position:relative}
 .costs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .cost{background:var(--paper);padding:26px 22px 30px}
-.cost .n{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--blue)}
+.cost .n{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--blue-ink)}
 .cost h3{margin-top:16px;font-size:1.12rem;letter-spacing:-.02em}
 .cost p{margin-top:10px;color:var(--ink-soft);font-size:.9rem;line-height:1.55}
 .problem-note{margin-top:30px;font-size:1.08rem;color:var(--ink);max-width:52ch;font-weight:600}
@@ -136,7 +137,7 @@ section{position:relative}
 .phil-list{border-top:1px solid var(--line)}
 .phil-row{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(18px,3.4vw,48px);
   align-items:baseline;padding:clamp(20px,2.6vw,30px) 0;border-bottom:1px solid var(--line)}
-.phil-row .rn{font-size:.78rem;font-weight:700;color:var(--blue)}
+.phil-row .rn{font-size:.78rem;font-weight:700;color:var(--blue-ink)}
 .phil-row h3{font-size:clamp(1.15rem,2.1vw,1.7rem);letter-spacing:-.025em;max-width:22em}
 .phil-row .tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink-faint);white-space:nowrap}
@@ -163,7 +164,7 @@ section{position:relative}
   transition:border-color .22s ease,box-shadow .22s ease}
 .pcard:hover{border-color:var(--ink);box-shadow:0 12px 32px rgba(22,22,15,.07)}
 .pcard-top{display:flex;justify-content:space-between;align-items:baseline}
-.pcard .stage{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.pcard .stage{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-ink)}
 .pcard .rn{font-size:.78rem;color:var(--ink-faint)}
 .pcard h3{font-size:1.45rem;letter-spacing:-.025em}
 .pcard .voice{font-family:var(--font-caveat),cursive;font-weight:700;
@@ -176,9 +177,9 @@ section{position:relative}
 .mod-head{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;
   padding:clamp(20px,2.6vw,30px) 0;width:100%;text-align:left;
   background:none;border:none;font:inherit;color:inherit;cursor:pointer}
-.mod-head .mn{font-size:.74rem;font-weight:700;color:var(--blue)}
+.mod-head .mn{font-size:.74rem;font-weight:700;color:var(--blue-ink)}
 .mod-head h3{font-size:clamp(1.2rem,2.3vw,1.8rem);letter-spacing:-.025em;transition:color .2s ease}
-.mod-head:hover h3{color:var(--blue)}
+.mod-head:hover h3{color:var(--blue-ink)}
 .mod-head .tog{width:32px;height:32px;border:1px solid var(--line);border-radius:999px;
   display:grid;place-items:center;transition:background .22s,border-color .22s,transform .3s}
 .mod-head .tog svg{width:13px;height:13px;fill:none;stroke:var(--ink);stroke-width:2;transition:stroke .22s}
@@ -190,12 +191,12 @@ section{position:relative}
 .mod-content{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,4vw,60px);
   padding:2px 0 clamp(26px,3.2vw,40px)}
 .mod-content .outcome{font-size:1.05rem;line-height:1.55;color:var(--ink);max-width:40ch}
-.mod-content .outcome .em{color:var(--blue);font-weight:600}
+.mod-content .outcome .em{color:var(--blue-ink);font-weight:600}
 .mlist{list-style:none;display:grid;gap:11px}
 .mlist li{display:grid;grid-template-columns:auto 1fr;gap:12px;font-size:.94rem;
   color:var(--ink-soft);padding-bottom:11px;border-bottom:1px solid var(--line-soft)}
 .mlist li:last-child{border-bottom:none;padding-bottom:0}
-.mlist .mk{font-size:.7rem;font-weight:700;color:var(--blue)}
+.mlist .mk{font-size:.7rem;font-weight:700;color:var(--blue-ink)}
 
 /* ══ PARTNERSHIP ═══════════════════════════ */
 .partner-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,76px);align-items:center}
@@ -219,11 +220,11 @@ section{position:relative}
   color:var(--color-blue-300);margin-bottom:22px}
 .closer h2{font-size:clamp(2rem,5vw,4rem);letter-spacing:-.035em;max-width:15em;
   margin-inline:auto;text-wrap:balance}
-.closer .sub{margin-top:20px;color:#b6b7ae;font-size:1.05rem;max-width:46ch;margin-inline:auto}
+.closer .sub{margin-top:20px;color:#c2c3ba;font-size:1.05rem;max-width:46ch;margin-inline:auto}
 .closer .acts{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .btn-onDark{background:var(--paper);color:var(--ink)}
 .btn-onDark:hover{background:#fff}
-.btn-lineDark{background:transparent;color:var(--paper);border-color:#44453d}
+.btn-lineDark{background:transparent;color:var(--paper);border-color:#6a6b62}
 .btn-lineDark:hover{border-color:var(--paper)}
 
 /* ══ FOOTER ════════════════════════════════ */
@@ -235,7 +236,7 @@ footer{background:var(--paper-2);color:var(--ink-soft);
 .foot-col h4{font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
   color:var(--ink-faint);margin-bottom:14px}
 .foot-col a{display:block;font-size:.92rem;padding:5px 0;transition:color .2s}
-.foot-col a:hover{color:var(--blue)}
+.foot-col a:hover{color:var(--blue-ink)}
 .foot-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
   font-size:.76rem;letter-spacing:.04em;color:var(--ink-faint);
   padding-top:22px;border-top:1px solid var(--line)}

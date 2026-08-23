@@ -11,6 +11,7 @@ import Partnership from "@/components/Partnership";
 import Closer from "@/components/Closer";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import LeadFlow from "@/components/lead/LeadFlow";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
       <Closer />
       <Footer />
       <Reveal />
+      <LeadFlow />
     </>
   );
 }

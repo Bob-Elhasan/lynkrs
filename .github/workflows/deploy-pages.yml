@@ -56,6 +56,10 @@ jobs:
         run: npm run build
         env:
           PAGES_BASE_PATH: ${{ steps.setup_pages.outputs.base_path }}
+          # Where the popup form posts its leads. Set this as a repository
+          # variable: Settings > Secrets and variables > Actions > Variables.
+          # See docs/lead-capture-setup.md.
+          NEXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.LEAD_ENDPOINT }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

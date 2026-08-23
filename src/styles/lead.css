@@ -1,0 +1,108 @@
+/* ══════════════════════════════════════════
+   LEAD CAPTURE
+   A three step journey in a panel. Same paper,
+   same rules, same one accent as the page.
+   ══════════════════════════════════════════ */
+
+.lead-scrim{
+  position:fixed;inset:0;z-index:200;
+  display:grid;justify-items:center;align-items:safe center;padding:clamp(12px,3vw,32px);
+  background:rgba(22,22,15,.52);
+  -webkit-backdrop-filter:saturate(120%) blur(3px);backdrop-filter:saturate(120%) blur(3px);
+  animation:lead-fade .22s ease both;
+  overflow-y:auto;
+}
+@keyframes lead-fade{from{opacity:0}to{opacity:1}}
+@keyframes lead-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.lead-panel{
+  position:relative;width:min(660px,100%);
+  background:var(--paper);border-radius:18px;
+  padding:clamp(28px,4vw,44px) clamp(22px,4vw,48px) clamp(24px,3vw,36px);
+  box-shadow:0 30px 80px rgba(22,22,15,.28);
+  animation:lead-rise .3s cubic-bezier(.22,.8,.28,1) both;
+}
+
+.lead-close{
+  position:absolute;top:14px;right:14px;width:38px;height:38px;
+  display:grid;place-items:center;border-radius:999px;
+  background:none;border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;
+  transition:border-color .2s ease,color .2s ease}
+.lead-close:hover{border-color:var(--ink);color:var(--ink)}
+.lead-close svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8}
+
+/* ── heading ─────────────────────────────── */
+.lead-eyebrow{display:block;font-size:.7rem;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--blue-ink);margin-bottom:14px}
+.lead-panel h2{font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.03em;max-width:15em}
+.lead-lede{margin-top:12px;color:var(--ink-soft);font-size:.96rem;line-height:1.55;max-width:44ch}
+
+/* ── progress rail ───────────────────────── */
+.lead-rail{list-style:none;display:flex;gap:10px;margin:26px 0 22px;padding:0}
+.lead-rail li{flex:1;display:flex;align-items:center;gap:8px;
+  padding-top:10px;border-top:2px solid var(--line);
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+.lead-rail li.on{border-top-color:var(--blue-ink);color:var(--blue-ink)}
+.lead-rail li.done{border-top-color:var(--blue);color:var(--ink-soft)}
+.lead-rail-n{font-weight:700}
+.lead-rail-l{font-weight:500}
+
+/* ── fields ──────────────────────────────── */
+.lead-form{display:grid;gap:16px}
+.lead-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lead-field{display:grid;gap:7px;min-width:0}
+.lead-field label{font-size:.78rem;font-weight:600;letter-spacing:.02em;color:var(--ink)}
+.lead-field input,.lead-phone{
+  width:100%;font:inherit;font-size:1rem;color:var(--ink);
+  background:#fff;border:1px solid var(--line-strong);border-radius:10px;
+  padding:12px 14px;transition:border-color .18s ease,box-shadow .18s ease}
+.lead-field input::placeholder{color:var(--ink-faint)}
+.lead-field input:focus{outline:none;border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-soft)}
+.lead-field.bad input,.lead-field.bad .lead-phone{border-color:var(--color-red-500)}
+.lead-hint{font-size:.8rem;color:var(--ink-faint);line-height:1.45}
+.lead-err{font-size:.8rem;color:var(--color-red-700);line-height:1.45}
+.lead-err-send{padding:10px 12px;border-radius:8px;background:var(--color-red-100)}
+
+/* the field a bot fills in and a person never sees */
+.lead-trap{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* ── phone with the country picker ───────── */
+.lead-phone{display:flex;align-items:center;gap:10px;padding:0}
+.lead-phone:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.lead-phone input{border:none;background:none;border-radius:0;padding:12px 14px 12px 0;flex:1;min-width:0}
+.lead-phone input:focus{outline:none;box-shadow:none}
+.lead-dial{position:relative;display:flex;align-items:center;gap:5px;
+  padding:12px 10px 12px 14px;border-right:1px solid var(--line);
+  font-size:.95rem;white-space:nowrap;color:var(--ink)}
+.lead-dial select{position:absolute;inset:0;width:100%;height:100%;
+  opacity:0;cursor:pointer;font-size:16px}
+.lead-dial svg{width:13px;height:13px;fill:none;stroke:var(--ink-soft);stroke-width:2}
+
+/* ── actions ─────────────────────────────── */
+.lead-acts{display:flex;gap:12px;margin-top:6px}
+.lead-submit{flex:1;justify-content:center}
+.lead-submit:disabled{opacity:.6;cursor:progress}
+.lead-foot{font-size:.78rem;color:var(--ink-faint);line-height:1.5}
+
+/* ── the finish ──────────────────────────── */
+.lead-done{display:grid;gap:0}
+.lead-next{list-style:none;display:grid;gap:2px;margin:26px 0 24px;padding:0}
+.lead-next li{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  padding:16px 0;border-top:1px solid var(--line)}
+.lead-next li:last-child{border-bottom:1px solid var(--line)}
+.lead-next span{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--blue-ink);padding-top:3px}
+.lead-next h3{font-size:1.02rem;letter-spacing:-.02em}
+.lead-next p{margin-top:5px;font-size:.92rem;line-height:1.5;color:var(--ink-soft)}
+
+/* ── small screens: a sheet, not a card ──── */
+@media(max-width:560px){
+  .lead-scrim{padding:0;place-items:end stretch}
+  .lead-panel{width:100%;border-radius:16px 16px 0 0;max-height:94svh;overflow-y:auto;
+    padding:26px 20px calc(24px + env(safe-area-inset-bottom))}
+  .lead-row{grid-template-columns:1fr}
+  .lead-rail{margin:22px 0 18px}
+  .lead-rail-l{display:none}
+  .lead-acts{flex-direction:column-reverse}
+}
