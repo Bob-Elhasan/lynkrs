@@ -43,6 +43,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${archivo.variable} ${inter.variable} ${caveat.variable}`}>
+      <head>
+        {/* The entrance reveal starts everything at opacity 0 and Reveal.tsx
+            fades it in. With scripting off nothing ever would, so the whole
+            document would render blank — and the prism needs script too, so
+            this is the page anyone without it actually gets. */}
+        <noscript>
+          <style>{".rv{opacity:1!important;transform:none!important}"}</style>
+        </noscript>
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -116,7 +116,6 @@ section{position:relative}
 /* ══ PROBLEM ═══════════════════════════════ */
 /* The four costs now live on the faces of the prism in problem-scene.css,
    which also carries the flat grid they fall back to. */
-.problem-note{margin-top:30px;font-size:1.08rem;color:var(--ink);max-width:52ch;font-weight:600}
 
 /* ══ POSITIONING ═══════════════════════════ */
 .position-quote{font-family:var(--font-display);font-weight:700;

@@ -1,0 +1,121 @@
+/* ══════════════════════════════════════════
+   THE PRISM
+   The whole site is one rectangular prism.
+   Every panel of copy is fixed to one of its
+   four faces; scrolling only moves the camera.
+
+   All of it is gated behind [data-ready], which
+   Scene.tsx sets after mount and never when
+   reduced motion is asked for. Without it these
+   are ordinary stacked sections — the document
+   the site has always been.
+   ══════════════════════════════════════════ */
+
+/* ── flat fallback: no JS, or reduced motion ────────────────── */
+
+.scene-spacer{height:0}
+.prism-side{display:none}
+
+/* ── the scene ──────────────────────────────────────────────── */
+
+.scene[data-ready]{
+  /* The face is sized in viewport units so copy renders at its natural size on
+     a phone instead of being scaled down to fit an oversized prism. */
+  --fw:min(880px,88vw);
+  --fh:min(600px,74vh);
+
+  position:fixed;inset:0;z-index:1;
+  background:var(--paper)}
+
+.scene[data-ready] .scene-viewport{
+  position:absolute;inset:0;overflow:hidden;
+  perspective:1400px;perspective-origin:50% 50%}
+
+.scene[data-ready] .world{
+  position:absolute;inset:0;
+  transform-style:preserve-3d;
+  will-change:transform;
+  /* written per frame by Scene.tsx: how square-on each face is */
+  --vis0:1;--vis1:0;--vis2:0;--vis3:0}
+
+/* The solid body. Four planes spanning the whole journey, so the far side of
+   the prism is always occluded and it reads as one object rather than as
+   floating cards. This is the blue you see as the form flows past. */
+.scene[data-ready] .prism-side{
+  display:block;position:absolute;left:50%;top:50%;
+  width:var(--fw);margin-left:calc(var(--fw) / -2);
+  background:var(--blue);
+  backface-visibility:hidden}
+
+.scene[data-ready] .prism-side:nth-child(1){filter:brightness(calc(.6 + .4 * var(--vis0)))}
+.scene[data-ready] .prism-side:nth-child(2){filter:brightness(calc(.6 + .4 * var(--vis1)))}
+.scene[data-ready] .prism-side:nth-child(3){filter:brightness(calc(.6 + .4 * var(--vis2)))}
+.scene[data-ready] .prism-side:nth-child(4){filter:brightness(calc(.6 + .4 * var(--vis3)))}
+
+/* Panels are inlaid on the faces; the blue body shows in the gaps between them. */
+.scene[data-ready] .panel{
+  position:absolute;left:50%;top:50%;
+  width:var(--fw);
+  /* sizes to its own copy — nothing is clipped — with margin-top set per panel
+     by Scene.tsx so it stays centred on its point down the prism */
+  height:auto;min-height:var(--fh);
+  margin-left:calc(var(--fw) / -2);
+  padding:0;
+  background:var(--paper);
+  border-radius:18px;
+  overflow:hidden;
+  backface-visibility:hidden;
+  /* a face turned away dims, which is the prism's shading */
+  filter:brightness(calc(.6 + .4 * var(--vis)))}
+
+.scene[data-ready] .panel[data-face="0"]{--vis:var(--vis0)}
+.scene[data-ready] .panel[data-face="1"]{--vis:var(--vis1)}
+.scene[data-ready] .panel[data-face="2"]{--vis:var(--vis2)}
+.scene[data-ready] .panel[data-face="3"]{--vis:var(--vis3)}
+
+/* Inside a panel the section keeps its own markup; it just has to fit the face
+   and scroll nothing of its own. */
+.scene[data-ready] .panel-in{
+  height:100%;display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(24px,3.4vw,48px)}
+.scene[data-ready] .panel-in > *{padding-block:0}
+.scene[data-ready] .panel-in .shell{padding-inline:0;max-width:none}
+.scene[data-ready] .panel-in .band,
+.scene[data-ready] .panel-in .hero,
+.scene[data-ready] .panel-in .statement,
+.scene[data-ready] .panel-in .closer{padding-block:0;min-height:0;background:none}
+
+/* Copy on a face is read square-on and close, so it wants to be a touch
+   smaller than the same copy filling a browser window. */
+.scene[data-ready] .panel-in .hero-h1{font-size:clamp(2rem,4.4vw,3.4rem)}
+.scene[data-ready] .panel-in h2{font-size:clamp(1.6rem,3vw,2.4rem)}
+.scene[data-ready] .panel-in .meta{margin-bottom:clamp(18px,2.4vw,30px)}
+
+/* The problem's four costs keep the storyboard's treatment: one to a face, in
+   the accent, white on blue. */
+.scene[data-ready] .panel.panel-blue{background:var(--blue)}
+.scene[data-ready] .panel-blue .panel-in{justify-content:center}
+.scene[data-ready] .panel-blue .n{
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;color:#fff;opacity:.6}
+.scene[data-ready] .panel-blue h3{
+  margin-top:14px;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(1.6rem,2.8vw,2.3rem);line-height:1.05;
+  text-transform:uppercase;color:#fff}
+.scene[data-ready] .panel-blue p{
+  margin-top:14px;font-size:clamp(1rem,1.3vw,1.15rem);line-height:1.5;color:#fff;opacity:.94}
+
+/* The one line that closes the problem, set like the storyboard's. */
+.scene[data-ready] .panel-note .panel-in{align-items:center;text-align:center}
+.scene[data-ready] .panel-note p{
+  font-family:var(--font-display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.4rem,2.8vw,2.2rem);line-height:1.12;letter-spacing:-.02em;
+  color:var(--blue);text-wrap:balance;max-width:18em}
+
+/* The reveal system is for a scrolling document; on a face the camera arriving
+   is the entrance, so let everything simply be present. */
+.scene[data-ready] .panel .rv{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  .scene{position:static!important}
+  .scene-viewport{perspective:none!important}
+}
