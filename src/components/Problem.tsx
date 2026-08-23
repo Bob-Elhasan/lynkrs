@@ -25,6 +25,16 @@ const COSTS = [
   },
 ];
 
+/* The flowing form and the prism are one object: a rectangular bar that snakes
+   down the section and swells into the four-sided segment the camera turns.
+   It runs straight through the middle — the stretch on screen while the prism
+   is at full size — so the prism reads as a swelling on the bar, not a separate
+   thing floating in front of it. Coordinates are in the 400x2000 viewBox. */
+const BEAM =
+  "M200 -140 C200 10 100 40 100 170 C100 300 200 250 200 300 " +
+  "L200 1670 " +
+  "C200 1800 300 1750 300 1880 C300 2010 200 2040 200 2160";
+
 /* Scroll choreography, as fractions of the track. The prism turns through the
    four faces across the middle; the ends are the camera moving in and back out. */
 const ENTER_END = 0.14;
@@ -33,6 +43,12 @@ const EXIT_START = 0.84;
    begins, so there is time to read it. */
 const FACE_HOLD = 0.3;
 const FACE_TURN = 0.45;
+/* The prism never rests perfectly square-on. A few degrees keeps a sliver of the
+   next face showing as a shaded edge, which is what matches the thickness the
+   flowing bar carries — dead-on, the prism would read as a flat card and the two
+   would stop looking like one object. Chosen so the sliver is about as wide as the bar's
+   own shaded side; the face still reads at 99% of full-on. */
+const REST_TILT = 4;
 
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -42,9 +58,10 @@ const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
 /**
- * The problem section as a scroll-driven scene: the camera pushes in on a
- * rectangular prism, which turns through its four faces — one cost per face —
- * before pulling back out to the closing line.
+ * The problem section as a scroll-driven scene: a rectangular prism flows down
+ * the page as a bar, swells where the camera pushes into it, turns through its
+ * four faces — one cost per face — then narrows back into the flow as the
+ * camera pulls out and the closing line takes its place.
  *
  * The 3D only switches on once this mounts and sets `data-ready`. Until then,
  * and whenever reduced motion is asked for, the same markup lays itself out as
@@ -53,15 +70,13 @@ const easeInOutCubic = (t: number) =>
  */
 export default function Problem() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
   const prismRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = trackRef.current?.closest<HTMLElement>(".problem-scene");
     const track = trackRef.current;
-    const stage = stageRef.current;
     const prism = prismRef.current;
-    if (!section || !track || !stage || !prism) return;
+    if (!section || !track || !prism) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -81,8 +96,9 @@ export default function Problem() {
       let zoom = 1;
       let fade = 1;
       if (p < ENTER_END) {
+        // Scale only, never opacity: the prism is a swelling on the bar, and a
+        // translucent one would show the opaque bar straight through itself.
         zoom = lerp(0.52, 1, easeOutCubic(p / ENTER_END));
-        fade = clamp01(p / (ENTER_END * 0.6));
       } else if (p > EXIT_START) {
         const t = (p - EXIT_START) / (1 - EXIT_START);
         zoom = lerp(1, 0.6, easeInCubic(t));
@@ -95,12 +111,13 @@ export default function Problem() {
       const index = Math.min(Math.floor(step), COSTS.length - 2);
       const within = step - index;
       const turn = easeInOutCubic(clamp01((within - FACE_HOLD) / FACE_TURN));
-      const rotation = -90 * (index + turn);
+      const rotation = -90 * (index + turn) - REST_TILT;
 
       prism.style.transform = `rotateY(${rotation}deg)`;
-      stage.style.setProperty("--zoom", zoom.toFixed(4));
-      stage.style.setProperty("--fade", fade.toFixed(4));
-      stage.style.setProperty(
+      // Set on the track so the bar and the stage both read them.
+      track.style.setProperty("--zoom", zoom.toFixed(4));
+      track.style.setProperty("--fade", fade.toFixed(4));
+      track.style.setProperty(
         "--note",
         clamp01((p - EXIT_START - 0.06) / 0.1).toFixed(4)
       );
@@ -151,21 +168,21 @@ export default function Problem() {
       </div>
 
       <div className="scene-track" ref={trackRef}>
-        {/* Rides in the track rather than the sticky stage, so it genuinely
-            travels past the prism instead of hanging still behind it. */}
+        {/* Rides in the track rather than the sticky stage, so the bar actually
+            travels while the prism segment of it stays put on screen. Drawn
+            twice: the offset copy underneath is the bar's shaded side, which is
+            what gives it the same extruded thickness as the prism. */}
         <svg
-          className="scene-ribbon"
+          className="scene-beam"
           viewBox="0 0 400 2000"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path
-            vectorEffect="non-scaling-stroke"
-            d="M200 0 C200 200 60 260 60 460 C60 660 340 700 340 900 C340 1100 200 1160 200 1360 L200 2000"
-          />
+          <path className="beam-side" vectorEffect="non-scaling-stroke" d={BEAM} />
+          <path className="beam-face" vectorEffect="non-scaling-stroke" d={BEAM} />
         </svg>
 
-        <div className="scene-stage" ref={stageRef}>
+        <div className="scene-stage">
           <div className="scene-camera">
             <div className="prism" ref={prismRef}>
               {COSTS.map((c, i) => (

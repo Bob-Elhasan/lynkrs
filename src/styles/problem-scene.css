@@ -12,7 +12,7 @@
 
 /* ── the flat fallback: no JS, or reduced motion ───────────── */
 
-.problem-scene .scene-ribbon,
+.problem-scene .scene-beam,
 .problem-scene .scene-note{display:none}
 
 .problem-scene .prism{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
@@ -28,21 +28,31 @@
 .problem-scene[data-ready]{--pw:clamp(240px,25vw,330px);--ph:clamp(380px,52vh,560px)}
 
 /* Scroll room. The stage sticks inside it while this scrolls past. */
-.problem-scene[data-ready] .scene-track{position:relative;height:420vh;margin-block:clamp(40px,6vw,80px)}
+.problem-scene[data-ready] .scene-track{position:relative;height:420vh;margin-block:clamp(40px,6vw,80px);
+  /* set per frame from Problem.tsx; the bar and the stage both read them */
+  --zoom:.52;--fade:1;--note:0}
 
-/* The ribbon runs the height of the track, so it travels past the prism as the
-   section scrolls. preserveAspectRatio is none to let it stretch to any track
-   height; the stroke is held at a constant width through that stretch. */
-.problem-scene[data-ready] .scene-ribbon{
+/* The bar is the same object as the prism, so it is the same material: the same
+   blue as the faces, with the same darker side showing its thickness. Anything
+   paler reads as decoration passing behind rather than as one continuous form.
+
+   preserveAspectRatio is none so it stretches to any track height; the stroke is
+   held at a constant width through that stretch, and its width is derived from
+   the prism's so the two stay in proportion at every breakpoint. */
+/* The closing line is the same blue as the bar, so blue-on-blue would erase it
+   wherever the two cross. The bar yields as the line arrives. */
+.problem-scene[data-ready] .scene-beam{
   display:block;position:absolute;inset:0;width:100%;height:100%;z-index:0;
-  fill:none;stroke:var(--blue);stroke-width:30;stroke-linecap:round;stroke-linejoin:round;
-  opacity:.13}
+  fill:none;stroke-linecap:round;stroke-linejoin:round;
+  opacity:calc(1 - .85 * var(--note))}
+.problem-scene[data-ready] .scene-beam path{stroke-width:calc(var(--pw) * .3)}
+/* offset copy underneath = the bar's shaded side */
+.problem-scene[data-ready] .beam-side{stroke:var(--color-blue-700);transform:translate(8px,8px)}
+.problem-scene[data-ready] .beam-face{stroke:var(--blue)}
 
 .problem-scene[data-ready] .scene-stage{
   position:sticky;top:0;height:100vh;overflow:hidden;z-index:1;
   display:grid;place-items:center;
-  /* set per frame from Problem.tsx */
-  --zoom:.52;--fade:0;--note:0;
   perspective:1200px;perspective-origin:50% 46%}
 
 .problem-scene[data-ready] .scene-camera{
