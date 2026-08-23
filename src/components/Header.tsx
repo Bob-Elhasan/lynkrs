@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Logo from "./Logo";
 
 const NAV_LINKS = [
   { href: "#problem", label: "The problem" },
@@ -34,8 +35,8 @@ export default function Header() {
       <div ref={sentinel} aria-hidden="true" />
       <header className={`topbar${stuck ? " stuck" : ""}`}>
         <div className="topbar-in">
-          <a className="wordmark" href="#top">
-            Lynkrs.
+          <a className="wordmark" href="#top" title="Back to top">
+            <Logo />
           </a>
           <nav className="topnav">
             {NAV_LINKS.map((l) => (

@@ -14,10 +14,12 @@
   --ink-faint:#6e6f66;
   --line:#e2e2da;
   --line-soft:#eeeee8;
-  /* Deep enough to clear 4.5:1 on the paper for body-size text. */
-  --blue:#1f4fd8;
-  --blue-soft:#e8edfd;
-  --blue-ink:#173da8;
+  /* Straight from the brand ramp in ds/colors.css: 500 is the blue of the
+     Lynkrs mark, so the logo and the accent are the same colour. Both clear
+     4.5:1 on the papers they sit on. */
+  --blue:var(--color-blue-500);
+  --blue-soft:var(--color-blue-50);
+  --blue-ink:var(--color-blue-600);
 
   --pad:clamp(20px,5vw,64px);
   --max:1180px;
@@ -63,7 +65,9 @@ section{position:relative}
 .topbar.stuck{border-bottom-color:var(--line)}
 .topbar-in{display:flex;align-items:center;justify-content:space-between;gap:24px;
   max-width:var(--max);margin:0 auto;padding:16px var(--pad)}
-.wordmark{font-family:var(--font-display);font-weight:700;font-size:1.12rem;letter-spacing:-.02em}
+.wordmark{display:flex;align-items:center;color:var(--blue);transition:color .2s ease}
+.wordmark svg{display:block;width:96px;height:auto}
+.wordmark:hover{color:var(--blue-ink)}
 .topnav{display:flex;gap:28px}
 .topnav a{font-size:.86rem;color:var(--ink-soft);padding-block:4px;position:relative}
 .topnav a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1.5px;
@@ -212,7 +216,7 @@ section{position:relative}
 /* ══ CLOSER ════════════════════════════════ */
 .closer{background:var(--ink);color:var(--paper);padding-block:clamp(80px,10vw,140px);text-align:center}
 .closer .eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
-  color:#9fb4f5;margin-bottom:22px}
+  color:var(--color-blue-300);margin-bottom:22px}
 .closer h2{font-size:clamp(2rem,5vw,4rem);letter-spacing:-.035em;max-width:15em;
   margin-inline:auto;text-wrap:balance}
 .closer .sub{margin-top:20px;color:#b6b7ae;font-size:1.05rem;max-width:46ch;margin-inline:auto}
@@ -226,8 +230,7 @@ section{position:relative}
 footer{background:var(--paper-2);color:var(--ink-soft);
   padding-block:clamp(44px,5vw,68px);border-top:1px solid var(--line)}
 .foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:44px}
-.foot-wordmark{display:block;font-family:var(--font-display);font-weight:700;
-  font-size:1.3rem;letter-spacing:-.02em;color:var(--ink);margin-bottom:14px}
+.foot-wordmark{display:block;width:124px;height:auto;color:var(--blue);margin-bottom:18px}
 .foot-brand p{max-width:32ch;font-size:.92rem;line-height:1.6}
 .foot-col h4{font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
   color:var(--ink-faint);margin-bottom:14px}

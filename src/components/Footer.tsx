@@ -1,10 +1,12 @@
+import Logo from "./Logo";
+
 export default function Footer() {
   return (
     <footer>
       <div className="shell">
         <div className="foot-grid">
           <div className="foot-brand">
-            <span className="foot-wordmark">Lynkrs.</span>
+            <Logo className="foot-wordmark" />
             <p>
               A growth agency. We join strategy, execution and reporting into one system, so marketing
               earns its keep.

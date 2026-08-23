@@ -20,10 +20,24 @@ const caveat = Caveat({
   weight: ["600", "700"],
 });
 
+// Pages serves the site from a sub path, so social cards need the full origin
+// to resolve against. Falls back to the dev server when the variable is unset.
+// metadataBase is the origin only: Next already prefixes the base path onto
+// asset URLs, so including it here would double it up.
+const basePath = process.env.PAGES_BASE_PATH ?? "";
+const origin = basePath ? "https://bob-elhasan.github.io" : "http://localhost:3000";
+const siteUrl = `${origin}${basePath}`;
+
+const title = "Lynkrs. Growth is designed, not guessed";
+const description =
+  "A growth agency that joins strategy, media, content and SEO into one system, so marketing earns its keep.";
+
 export const metadata: Metadata = {
-  title: "Lynkrs. Growth is designed, not guessed",
-  description:
-    "A growth agency that joins strategy, media, content and SEO into one system, so marketing earns its keep.",
+  metadataBase: new URL(origin),
+  title,
+  description,
+  openGraph: { title, description, siteName: "Lynkrs", type: "website", url: siteUrl },
+  twitter: { card: "summary_large_image", title, description },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
