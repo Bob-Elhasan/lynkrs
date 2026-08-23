@@ -14,7 +14,7 @@
 /* ── flat fallback: no JS, or reduced motion ────────────────── */
 
 .scene-spacer{height:0}
-.prism-side{display:none}
+.tube{display:none}
 
 /* ── the scene ──────────────────────────────────────────────── */
 
@@ -38,40 +38,36 @@
   /* written per frame by Scene.tsx: how square-on each face is */
   --vis0:1;--vis1:0;--vis2:0;--vis3:0}
 
-/* The solid body. Four planes spanning the whole journey, so the far side of
-   the prism is always occluded and it reads as one object rather than as
-   floating cards. This is the blue you see as the form flows past. */
-.scene[data-ready] .prism-side{
+/* The skin of the tube: four quads per step along the route, each placed by a
+   matrix3d from Scene.tsx. This is the blue form the camera rides. */
+.scene[data-ready] .tube{display:block;position:absolute;inset:0;transform-style:preserve-3d}
+.scene[data-ready] .tube-face{
   display:block;position:absolute;left:50%;top:50%;
-  width:var(--fw);margin-left:calc(var(--fw) / -2);
   background:var(--blue);
+  transform-origin:50% 50%;
   backface-visibility:hidden}
 
-.scene[data-ready] .prism-side:nth-child(1){filter:brightness(calc(.6 + .4 * var(--vis0)))}
-.scene[data-ready] .prism-side:nth-child(2){filter:brightness(calc(.6 + .4 * var(--vis1)))}
-.scene[data-ready] .prism-side:nth-child(3){filter:brightness(calc(.6 + .4 * var(--vis2)))}
-.scene[data-ready] .prism-side:nth-child(4){filter:brightness(calc(.6 + .4 * var(--vis3)))}
+.scene[data-ready] .tube-face[data-face="0"]{filter:brightness(calc(.55 + .45 * var(--vis0)))}
+.scene[data-ready] .tube-face[data-face="1"]{filter:brightness(calc(.55 + .45 * var(--vis1)))}
+.scene[data-ready] .tube-face[data-face="2"]{filter:brightness(calc(.55 + .45 * var(--vis2)))}
+.scene[data-ready] .tube-face[data-face="3"]{filter:brightness(calc(.55 + .45 * var(--vis3)))}
 
 /* Panels are inlaid on the faces; the blue body shows in the gaps between them. */
 .scene[data-ready] .panel{
   position:absolute;left:50%;top:50%;
   width:var(--fw);
-  /* sizes to its own copy — nothing is clipped — with margin-top set per panel
-     by Scene.tsx so it stays centred on its point down the prism */
+  /* sizes to its own copy — nothing is clipped — with the margins that centre it
+     on its point along the route written per panel by Scene.tsx */
   height:auto;min-height:var(--fh);
-  margin-left:calc(var(--fw) / -2);
+  transform-origin:50% 50%;
   padding:0;
   background:var(--paper);
   border-radius:18px;
   overflow:hidden;
   backface-visibility:hidden;
-  /* a face turned away dims, which is the prism's shading */
+  /* written per frame by Scene.tsx from how square-on this panel is */
+  --vis:1;
   filter:brightness(calc(.6 + .4 * var(--vis)))}
-
-.scene[data-ready] .panel[data-face="0"]{--vis:var(--vis0)}
-.scene[data-ready] .panel[data-face="1"]{--vis:var(--vis1)}
-.scene[data-ready] .panel[data-face="2"]{--vis:var(--vis2)}
-.scene[data-ready] .panel[data-face="3"]{--vis:var(--vis3)}
 
 /* Inside a panel the section keeps its own markup; it just has to fit the face
    and scroll nothing of its own. */
