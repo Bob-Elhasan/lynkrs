@@ -53,6 +53,7 @@ export default function Home() {
             turn={3 + i}
             bend={COST_BEND[i]}
             climb={COST_CLIMB[i]}
+            place="on"
             className="panel-blue"
             key={c.n}
           >

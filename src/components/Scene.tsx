@@ -7,6 +7,7 @@ import {
   cross,
   dot,
   frameAt,
+  lerp3,
   modelMatrix,
   mul,
   norm,
@@ -47,6 +48,17 @@ const RIDE_SIDE = 760;
 const RIDE_LIFT = 460;
 /** Tube left showing between one panel and the next, as a fraction of viewport. */
 const GAP = 0.5;
+/** The column is a spine running through the composition, not a wall to paste
+    pages on: it stays narrow, and content hangs off it in open space. */
+const COL_MAX = 300;
+const COL_VW = 0.2;
+/** Gap between the column's face and the copy that hangs off it. */
+const ARM = 92;
+/** How far off the column's surface the copy floats. */
+const FLOAT = 150;
+/** Below this the column and the copy cannot sit side by side, so the copy
+    floats in front of the column instead of beside it. */
+const SIDE_BY_SIDE_MIN = 900;
 /** Straight tube run beyond the first and last panel, so it reads as endless. */
 const LEAD = 1600;
 /** How much track either side of the camera is drawn. Beyond this the tube has
@@ -60,6 +72,11 @@ const PERSPECTIVE = 1400;
 /** How much of the frame a panel may fill when the camera settles. */
 const FIT_W = 0.94;
 const FIT_H = 0.86;
+/** Minimum gap between the eye and the copy it is reading. Without a floor a
+    composition that already fits needs no pull-back at all, which puts the
+    camera exactly on the content plane: the view is degenerate and the shading
+    normal collapses to zero, dimming the copy it was meant to light. */
+const STANDOFF = 260;
 /** Scroll length granted to each step, as a fraction of the viewport. */
 const STEP_SCROLL = 1.0;
 
@@ -83,12 +100,15 @@ export function Panel({
   turn,
   bend = 0,
   climb = 0,
+  place = "off",
   className = "",
   children,
 }: {
   turn: number;
   bend?: number;
   climb?: number;
+  /** "off" hangs the copy beside the column; "on" prints it into the column. */
+  place?: "off" | "on";
   className?: string;
   children: React.ReactNode;
 }) {
@@ -99,6 +119,7 @@ export function Panel({
       data-bend={bend}
       data-climb={climb}
       data-face={faceOf(turn)}
+      data-place={place}
     >
       <div className="panel-in">{children}</div>
     </section>
@@ -109,14 +130,16 @@ export default function Scene({ children }: { children: React.ReactNode }) {
   const sceneRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
   const tubeRef = useRef<HTMLDivElement>(null);
+  const armsRef = useRef<HTMLDivElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const scene = sceneRef.current;
     const world = worldRef.current;
     const tube = tubeRef.current;
+    const arms = armsRef.current;
     const spacer = spacerRef.current;
-    if (!scene || !world || !tube || !spacer) return;
+    if (!scene || !world || !tube || !arms || !spacer) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const panels = Array.from(world.querySelectorAll<HTMLElement>(".panel"));
@@ -127,19 +150,30 @@ export default function Scene({ children }: { children: React.ReactNode }) {
     const climbs = panels.map((el) => Number(el.dataset.climb ?? 0));
 
     let half = 0;
-    /** Where each panel sits along the route, and the distance that frames it. */
+    /** Where each panel sits along the route. */
     let arcs: number[] = [];
-    let rests: number[] = [];
     let path = buildPath([], PER_SPAN);
-    /** Outward normal and centre of each panel, for shading. */
+    /** Outward normal of each panel, for shading. */
     let normals: Vec3[] = [];
-    let centres: Vec3[] = [];
+
+    /** Which side of the column each panel hangs off, and how far. */
+    let aims: Vec3[] = [];
+    let eyeDists: number[] = [];
+    let colHalf = 0;
 
     const layout = () => {
-      half = panels[0].offsetWidth / 2;
+      const sideBySide = window.innerWidth >= SIDE_BY_SIDE_MIN;
+      colHalf = Math.min(COL_MAX, window.innerWidth * COL_VW) / 2;
+      half = colHalf;
       const gap = window.innerHeight * GAP;
       const availW = window.innerWidth * FIT_W;
       const availH = window.innerHeight * FIT_H;
+
+      // Embedded panels are printed on the column, so they take its width.
+      // Everything else keeps the width the stylesheet gives it.
+      panels.forEach((el) => {
+        el.style.width = el.dataset.place === "on" ? `${colHalf * 2}px` : "";
+      });
 
       // A span runs from one panel's centre to the next, and carries that
       // panel's steering. Lead-in and lead-out keep the tube running past both
@@ -158,35 +192,87 @@ export default function Scene({ children }: { children: React.ReactNode }) {
       const { frames, marks } = path;
 
       arcs = [];
-      rests = [];
       normals = [];
-      centres = [];
+      aims = [];
+      eyeDists = [];
+      const armParts: string[] = [];
 
       panels.forEach((el, i) => {
         // marks[0] is the start of the lead-in, so panel i is at marks[i + 1].
         const f = frames[marks[i + 1]];
         const n = normalAt(f, faceOf(turns[i]) * 90);
-        // A hair proud of the tube surface, or the two z-fight.
-        const centre = add(f.pos, mul(n, half + 2));
         const ey = f.t;
         const ex = norm(cross(ey, n));
-
         const w = el.offsetWidth;
         const h = el.offsetHeight;
+
+        const embedded = el.dataset.place === "on";
+        // Alternate which side the copy hangs off, so the journey reads as
+        // content flung left and right of the spine rather than a stack.
+        const sign = i % 2 === 0 ? 1 : -1;
+
+        let centre: Vec3;
+        let aim: Vec3;
+        let needW: number;
+        let depth: number;
+
+        if (embedded) {
+          // Printed into the column itself. Barely proud of the surface: enough
+          // to win the depth test, little enough that no lip shows at a grazing
+          // angle mid-ride.
+          depth = colHalf + 1;
+          centre = add(f.pos, mul(n, depth));
+          aim = f.pos;
+          needW = colHalf * 2;
+        } else if (sideBySide) {
+          depth = colHalf + FLOAT;
+          const lateral = colHalf + ARM + w / 2;
+          centre = add(add(f.pos, mul(n, depth)), mul(ex, sign * lateral));
+          // Frame the column and the copy together: the far edge of one to the
+          // far edge of the other, aimed at the midpoint between them.
+          const far = lateral + w / 2;
+          needW = far + colHalf;
+          aim = add(f.pos, mul(ex, (sign * (far - colHalf)) / 2));
+
+          // The arm: what makes the copy read as thrown off the column rather
+          // than floating near it.
+          const armLen = ARM + 8;
+          const armC = add(
+            add(f.pos, mul(n, colHalf + FLOAT / 2)),
+            mul(ex, sign * (colHalf + armLen / 2))
+          );
+          armParts.push(
+            `<i class="arm" style="width:${armLen.toFixed(2)}px;height:5px;` +
+              `margin-left:${(-armLen / 2).toFixed(2)}px;margin-top:-2.5px;` +
+              `transform:${modelMatrix(armC, ex, ey, n)}"></i>`
+          );
+        } else {
+          // Too narrow to sit beside the column, so it floats in front of it.
+          depth = colHalf + FLOAT * 1.6;
+          centre = add(f.pos, mul(n, depth));
+          aim = f.pos;
+          needW = Math.max(w, colHalf * 2);
+        }
+
         el.style.marginLeft = `${(-w / 2).toFixed(2)}px`;
         el.style.marginTop = `${(-h / 2).toFixed(2)}px`;
         el.style.transform = modelMatrix(centre, ex, ey, n);
 
         arcs.push(f.arc);
         normals.push(n);
-        centres.push(add(f.pos, mul(n, half)));
+        aims.push(aim);
 
-        // Never magnify; pull back as far as the wider or taller panel needs so
-        // none of its copy falls outside the frame.
-        const scale = Math.min(availW / w, availH / h, 1);
-        rests.push(PERSPECTIVE / scale - PERSPECTIVE);
+        // Stand far enough back that neither the column nor the copy falls
+        // outside the frame, and never closer than the floor.
+        const back = Math.max(
+          PERSPECTIVE * (needW / availW - 1),
+          PERSPECTIVE * (h / availH - 1),
+          STANDOFF
+        );
+        eyeDists.push(depth + back);
       });
 
+      arms.innerHTML = armParts.join("");
       buildTube();
 
       spacer.style.height = `${
@@ -273,8 +359,7 @@ export default function Scene({ children }: { children: React.ReactNode }) {
       // Swing wide through the middle of a move, so the bend is seen from
       // outside rather than from a face pressed up against the camera.
       const swing = 4 * e * (1 - e);
-      const dist =
-        half + rests[i] + (rests[i + 1] - rests[i]) * e + swing * PULL_BACK;
+      const dist = eyeDists[i] + (eyeDists[i + 1] - eyeDists[i]) * e + swing * PULL_BACK;
 
       // The eye swings out and up through the move; the aim stays on the tube's
       // axis and the horizon stays the track's own direction. At a stop every
@@ -282,18 +367,26 @@ export default function Scene({ children }: { children: React.ReactNode }) {
       // straight at it" — which is why copy still reads dead-on.
       const side = norm(cross(f.t, n));
       const lead = turns[i + 1] >= turns[i] ? 1 : -1;
+      // The aim slides between the column and the copy hanging off it, so both
+      // stay in frame at a stop; mid-move it returns to the column itself.
+      const target = lerp3(
+        lerp3(aims[i], aims[i + 1], e),
+        f.pos,
+        swing
+      );
       const eye = add(
-        add(f.pos, mul(n, half + dist)),
+        add(target, mul(n, dist)),
         add(mul(side, lead * swing * RIDE_SIDE), mul(f.t, -swing * RIDE_LIFT))
       );
-      const fwd = norm(sub(f.pos, eye));
+      const fwd = norm(sub(target, eye));
       world.style.transform = viewMatrix(eye, fwd, mul(f.t, -1));
 
-      // Per panel: how square-on it is to the camera. Both its legibility and
-      // the shading that makes the prism read as solid.
+      // Per panel: how square-on its plane is to the screen. Measured against
+      // the view direction, not the line to the eye — copy hanging off to one
+      // side is still perfectly parallel to the screen and perfectly readable,
+      // and judging it by the line to the eye would dim it for being off-centre.
       panels.forEach((el, k) => {
-        const toEye = norm(sub(eye, centres[k]));
-        const vis = Math.max(0, dot(normals[k], toEye));
+        const vis = Math.max(0, -dot(normals[k], fwd));
         el.style.setProperty("--vis", (vis * vis).toFixed(4));
       });
 
@@ -356,6 +449,7 @@ export default function Scene({ children }: { children: React.ReactNode }) {
       window.removeEventListener("resize", onResize);
       scene.removeAttribute("data-ready");
       tube.innerHTML = "";
+      arms.innerHTML = "";
     };
   }, []);
 
@@ -365,6 +459,7 @@ export default function Scene({ children }: { children: React.ReactNode }) {
         <div className="scene-viewport">
           <div className="world" ref={worldRef}>
             <div className="tube" ref={tubeRef} aria-hidden="true" />
+            <div className="arms" ref={armsRef} aria-hidden="true" />
             {children}
           </div>
         </div>

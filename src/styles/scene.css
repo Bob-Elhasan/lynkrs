@@ -14,15 +14,17 @@
 /* ── flat fallback: no JS, or reduced motion ────────────────── */
 
 .scene-spacer{height:0}
-.tube{display:none}
+.tube,.arms{display:none}
 
 /* ── the scene ──────────────────────────────────────────────── */
 
 .scene[data-ready]{
   /* The face is sized in viewport units so copy renders at its natural size on
      a phone instead of being scaled down to fit an oversized prism. */
-  --fw:min(880px,88vw);
-  --fh:min(600px,74vh);
+  /* Copy hangs off the column, so it is sized to be read beside it rather
+     than to cover it. */
+  --fw:min(600px,84vw);
+  --fh:auto;
 
   position:fixed;inset:0;z-index:1;
   background:var(--paper)}
@@ -40,7 +42,14 @@
 
 /* The skin of the tube: four quads per step along the route, each placed by a
    matrix3d from Scene.tsx. This is the blue form the camera rides. */
-.scene[data-ready] .tube{display:block;position:absolute;inset:0;transform-style:preserve-3d}
+.scene[data-ready] .tube,
+.scene[data-ready] .arms{display:block;position:absolute;inset:0;transform-style:preserve-3d}
+
+/* The short bar from the column out to the copy. This is what makes the copy
+   read as thrown off the spine rather than merely floating near it. */
+.scene[data-ready] .arm{
+  display:block;position:absolute;left:50%;top:50%;
+  background:var(--blue);opacity:.9;border-radius:3px}
 .scene[data-ready] .tube-face{
   display:block;position:absolute;left:50%;top:50%;
   background:var(--blue);
@@ -52,28 +61,36 @@
 .scene[data-ready] .tube-face[data-face="2"]{filter:brightness(calc(.55 + .45 * var(--vis2)))}
 .scene[data-ready] .tube-face[data-face="3"]{filter:brightness(calc(.55 + .45 * var(--vis3)))}
 
-/* Panels are inlaid on the faces; the blue body shows in the gaps between them. */
+/* Copy floats in the space beside the column. Deliberately not a card: a panel
+   with its own ground and rounded corners reads as a web page stuck onto the
+   column, which is exactly what this is not. */
 .scene[data-ready] .panel{
   position:absolute;left:50%;top:50%;
   width:var(--fw);
-  /* sizes to its own copy — nothing is clipped — with the margins that centre it
-     on its point along the route written per panel by Scene.tsx */
-  height:auto;min-height:var(--fh);
+  height:auto;
   transform-origin:50% 50%;
   padding:0;
-  background:var(--paper);
-  border-radius:18px;
-  overflow:hidden;
+  background:none;border:0;border-radius:0;overflow:visible;
   backface-visibility:hidden;
   /* written per frame by Scene.tsx from how square-on this panel is */
   --vis:1;
   filter:brightness(calc(.6 + .4 * var(--vis)))}
 
+/* Except the four costs, which are printed into the column itself. Those take
+   the shading of the column face they sit on rather than their own, or they
+   read as a darker slab stuck to the column instead of part of it. */
+.scene[data-ready] .panel[data-place="on"]{border-radius:0;overflow:hidden}
+.scene[data-ready] .panel[data-place="on"][data-face="0"]{filter:brightness(calc(.55 + .45 * var(--vis0)))}
+.scene[data-ready] .panel[data-place="on"][data-face="1"]{filter:brightness(calc(.55 + .45 * var(--vis1)))}
+.scene[data-ready] .panel[data-place="on"][data-face="2"]{filter:brightness(calc(.55 + .45 * var(--vis2)))}
+.scene[data-ready] .panel[data-place="on"][data-face="3"]{filter:brightness(calc(.55 + .45 * var(--vis3)))}
+
 /* Inside a panel the section keeps its own markup; it just has to fit the face
    and scroll nothing of its own. */
 .scene[data-ready] .panel-in{
-  height:100%;display:flex;flex-direction:column;justify-content:center;
-  padding:clamp(24px,3.4vw,48px)}
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0}
+.scene[data-ready] .panel[data-place="on"] .panel-in{padding:clamp(22px,2.4vw,34px)}
 .scene[data-ready] .panel-in > *{padding-block:0}
 .scene[data-ready] .panel-in .shell{padding-inline:0;max-width:none}
 .scene[data-ready] .panel-in .band,
@@ -83,13 +100,14 @@
 
 /* Copy on a face is read square-on and close, so it wants to be a touch
    smaller than the same copy filling a browser window. */
-.scene[data-ready] .panel-in .hero-h1{font-size:clamp(2rem,4.4vw,3.4rem)}
-.scene[data-ready] .panel-in h2{font-size:clamp(1.6rem,3vw,2.4rem)}
+.scene[data-ready] .panel-in .hero-h1{font-size:clamp(1.9rem,3.6vw,2.9rem)}
+.scene[data-ready] .panel-in h2{font-size:clamp(1.45rem,2.5vw,2.05rem)}
 .scene[data-ready] .panel-in .meta{margin-bottom:clamp(18px,2.4vw,30px)}
 
 /* The problem's four costs keep the storyboard's treatment: one to a face, in
    the accent, white on blue. */
 .scene[data-ready] .panel.panel-blue{background:var(--blue)}
+.scene[data-ready] .panel-blue{min-height:var(--col-min,0)}
 .scene[data-ready] .panel-blue .panel-in{justify-content:center}
 .scene[data-ready] .panel-blue .n{
   font-size:.72rem;font-weight:700;letter-spacing:.14em;color:#fff;opacity:.6}
