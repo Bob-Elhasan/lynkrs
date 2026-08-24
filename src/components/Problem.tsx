@@ -1,4 +1,7 @@
-const COSTS = [
+/* The problem section, cut into panels. Each cost takes a face of its own, which
+   is the sequence the storyboard turns through; the camera does the turning. */
+
+export const COSTS = [
   {
     n: "01",
     title: "Wasted spend",
@@ -21,7 +24,7 @@ const COSTS = [
   },
 ];
 
-export default function Problem() {
+export function ProblemIntro() {
   return (
     <section className="band" id="problem">
       <div className="shell">
@@ -29,29 +32,34 @@ export default function Problem() {
           <span className="idx">01</span>
           <span className="lbl">The problem</span>
         </div>
-        <div className="head">
-          <h2 className="rv">
-            Most marketing does not fail because nobody is working hard. It fails because nothing is joined
-            up.
-          </h2>
-          <p className="rv" data-delay="80">
-            Different agencies, different targets, and nobody owning the result. You end up paying for that
-            in four places at once.
-          </p>
-        </div>
-        <div className="costs">
-          {COSTS.map((c, i) => (
-            <div className="cost rv" key={c.n} data-delay={i * 70}>
-              <span className="n">{c.n}</span>
-              <h3>{c.title}</h3>
-              <p>{c.body}</p>
-            </div>
-          ))}
-        </div>
-        <p className="problem-note rv" data-delay="280">
-          Marketing turns into a cost you tolerate instead of an investment you make.
+        <h2 className="rv">
+          Most marketing does not fail because nobody is working hard. It fails because nothing is joined
+          up.
+        </h2>
+        <p className="rv" data-delay="80">
+          Different agencies, different targets, and nobody owning the result. You end up paying for that
+          in four places at once.
         </p>
       </div>
     </section>
+  );
+}
+
+export function ProblemCost({ index }: { index: number }) {
+  const c = COSTS[index];
+  return (
+    <article className="cost-face">
+      <span className="n">{c.n}</span>
+      <h3>{c.title}</h3>
+      <p>{c.body}</p>
+    </article>
+  );
+}
+
+export function ProblemNote() {
+  return (
+    <p className="rv">
+      Marketing turns into a cost you tolerate instead of an investment you make.
+    </p>
   );
 }
